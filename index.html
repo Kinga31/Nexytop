@@ -23,9 +23,10 @@ body {
   -webkit-font-smoothing: antialiased;
   position: relative;
   min-height: 100vh;
+  transition: background .3s;
 }
 
-/* ===== FOND DE PAGE : LOGOS EN FILIGRANE ===== */
+/* Fond de page global (accueil/catalogue) : logos en filigrane */
 body::before {
   content: '';
   position: fixed;
@@ -35,24 +36,42 @@ body::before {
     url('images/pubg-mobile.png'),
     url('images/mobile-legends.png'),
     url('images/roblox.png'),
-    url('images/genshin-impact.png'),
-    url('images/delta-force.png'),
-    url('images/minecraft.png'),
-    url('images/discord.png'),
-    url('images/telegram-premium.png'),
-    url('images/steam.png');
+    url('images/genshin-impact.png');
   background-size: 120px;
-  background-position:
-    5% 10%, 85% 15%, 15% 80%, 90% 75%, 50% 5%,
-    30% 40%, 70% 45%, 10% 55%, 60% 90%, 40% 95%;
+  background-position: 5% 10%, 85% 15%, 15% 80%, 90% 75%, 50% 5%;
   background-repeat: no-repeat;
   opacity: 0.05;
-  z-index: -1;
+  z-index: -2;
   pointer-events: none;
   filter: grayscale(1);
 }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+/* ===== FOND SPÉCIFIQUE À CHAQUE JEU ===== */
+#gameBg {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity .5s ease;
+}
+#gameBg.active { opacity: 0.15; }
+[data-theme="dark"] #gameBg.active { opacity: 0.2; }
+
+/* Voile pour lisibilité sur la fiche jeu */
+#gameBg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--bg) 70%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 90%, transparent) 100%);
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
 
 /* Header */
 header { border-bottom: 1px solid var(--border); position: sticky; top: 0; background: color-mix(in srgb, var(--bg) 85%, transparent); z-index: 50; backdrop-filter: blur(16px); }
@@ -75,7 +94,7 @@ nav a.active::after { content:''; position:absolute; bottom:-24px; left:0; right
 .hero p { color: var(--muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
 
 /* Pages */
-.page { display: none; padding: 50px 0; }
+.page { display: none; padding: 50px 0; position: relative; z-index: 1; }
 .page.active { display: block; }
 h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5px; }
 
@@ -96,7 +115,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5
 .game-card:hover::before { opacity: .06; }
 .game-card > * { position: relative; z-index: 1; }
 
-/* LOGO CARRÉ — object-fit: cover */
+/* LOGO CARRÉ */
 .game-img {
   width: 84px; height: 84px; margin: 0 auto 14px;
   border-radius: 20px; overflow: hidden;
@@ -117,8 +136,10 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5
 /* Packs */
 .packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; margin-top: 28px; }
 .pack {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+  background: color-mix(in srgb, var(--bg2) 90%, transparent);
+  border: 1px solid var(--border); border-radius: 16px;
   padding: 20px 16px; text-align: center; cursor: pointer; transition: .25s;
+  backdrop-filter: blur(10px);
 }
 .pack:hover { border-color: var(--violet); transform: translateY(-3px); box-shadow: var(--shadow); }
 .pack-name { font-weight: 700; font-size: .92rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -222,6 +243,9 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5
 </style>
 </head>
 <body>
+
+<!-- Fond spécifique au jeu -->
+<div id="gameBg"></div>
 
 <header>
   <div class="container header-inner">
@@ -388,6 +412,11 @@ function go(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   $('p-' + page).classList.add('active');
   document.querySelectorAll('nav a').forEach(a => a.classList.toggle('active', a.dataset.p === page));
+  // Retirer le fond de jeu si on quitte la fiche jeu
+  if (page !== 'jeu') {
+    $('gameBg').classList.remove('active');
+    $('gameBg').style.backgroundImage = '';
+  }
   window.scrollTo(0, 0);
 }
 
@@ -427,11 +456,18 @@ $('search').addEventListener('input', renderCatalogue);
 $('catFilter').addEventListener('change', renderCatalogue);
 
 let currentGame = null;
+
 function ouvrirJeu(slug) {
   const game = DATA.find(g => g.slug === slug);
   if (!game) return;
   currentGame = game;
   $('gameTitle').textContent = game.name;
+
+  // ===== FOND SPÉCIFIQUE AU JEU =====
+  const bg = $('gameBg');
+  bg.style.backgroundImage = `url('images/fond-${game.slug}.png')`;
+  bg.classList.add('active');
+
   $('packs').innerHTML = game.packs.map((p, i) => `
     <div class="pack" onclick="openForPack(${i})">
       <div class="pack-name">${monnaieIcon(game.slug)}${p.n}</div>
