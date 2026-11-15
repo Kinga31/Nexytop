@@ -23,6 +23,8 @@
 body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; transition:background .3s,color .3s; }
 .container { max-width:1200px; margin:0 auto; padding:0 20px; }
 .accent { color:var(--violet); }
+
+/* Header */
 .header { background:var(--bg); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
 .header-inner { display:flex; align-items:center; justify-content:space-between; height:72px; gap:20px; }
 .logo { font-size:1.6rem; font-weight:800; letter-spacing:1px; cursor:pointer; }
@@ -34,76 +36,193 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
 .icon-btn { background:var(--bg-alt); border:1px solid var(--border); border-radius:50%; width:42px; height:42px; cursor:pointer; font-size:1.1rem; position:relative; }
 .icon-btn:hover { background:var(--violet-soft); }
 .cart-badge { position:absolute; top:-4px; right:-4px; background:var(--violet); color:#fff; border-radius:50%; font-size:.65rem; font-weight:700; min-width:18px; height:18px; display:flex; align-items:center; justify-content:center; padding:0 4px; }
+
+/* Pages */
 .page { display:none; }
 .page.active { display:block; }
+
+/* Hero */
 .hero { background:radial-gradient(ellipse at top, var(--violet-soft), transparent 60%); padding:90px 0 70px; text-align:center; }
 .hero-badge { display:inline-block; background:var(--violet-soft); color:var(--violet); padding:6px 16px; border-radius:999px; font-size:.85rem; font-weight:600; margin-bottom:20px; }
 .hero h1 { font-size:clamp(2rem,5vw,3.2rem); font-weight:800; margin-bottom:18px; line-height:1.2; }
 .hero p { color:var(--text-muted); font-size:1.1rem; margin-bottom:32px; }
 .hero-actions { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+/* Buttons */
 .btn { display:inline-block; padding:13px 30px; border-radius:12px; font-weight:600; cursor:pointer; border:none; font-size:1rem; transition:all .2s; }
 .btn-primary { background:var(--violet); color:#fff; }
 .btn-primary:hover { background:var(--violet-hover); transform:translateY(-2px); }
 .btn-outline { background:transparent; color:var(--violet); border:2px solid var(--violet); }
 .btn-outline:hover { background:var(--violet-soft); }
 .btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+
+/* Sections */
 .section { padding:60px 20px; }
 .section h2 { font-size:1.8rem; margin-bottom:28px; }
 .section-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
 .section-head h2 { margin:0; }
 .link-more { color:var(--violet); cursor:pointer; font-weight:600; }
+
+/* Grid */
 .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:20px; }
 .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:22px 18px; text-align:center; cursor:pointer; transition:all .25s; }
 .card:hover { transform:translateY(-5px); border-color:var(--violet); box-shadow:var(--shadow); }
 .card h3 { font-size:1rem; margin-bottom:6px; }
 .card .price { color:var(--violet); font-weight:700; font-size:.9rem; }
-.game-img-wrap { width:72px; height:72px; margin:0 auto 14px; border-radius:18px; background:linear-gradient(135deg, var(--game-color,var(--violet)), color-mix(in srgb, var(--game-color,var(--violet)) 60%, #000)); display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 14px color-mix(in srgb, var(--game-color,var(--violet)) 35%, transparent); overflow:hidden; }
-.game-img-wrap.small { width:80px; height:80px; margin:0; }
-.game-img-wrap img { width:100%; height:100%; object-fit:contain; padding:10px; }
+
+/* Image jeu — CORRIGÉ */
+.game-img-wrap {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 14px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--game-color,var(--violet)), color-mix(in srgb, var(--game-color,var(--violet)) 60%, #000));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--game-color,var(--violet)) 35%, transparent);
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+.game-img-wrap.small { width: 80px; height: 80px; margin: 0; }
+.game-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  padding: 8px;
+  box-sizing: border-box;
+  display: block;
+}
 .game-emoji { font-size:1.5rem; line-height:1; }
 .game-initials { font-size:.65rem; font-weight:800; color:#fff; letter-spacing:1px; margin-top:2px; }
 .game-fallback { flex-direction:column; align-items:center; }
+
+/* Features */
 .features { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:22px; }
 .feature { background:var(--bg-alt); border:1px solid var(--border); border-radius:var(--radius); padding:30px 22px; text-align:center; }
 .feature-icon { font-size:2.2rem; margin-bottom:14px; }
 .feature h3 { margin-bottom:8px; font-size:1.1rem; }
 .feature p { color:var(--text-muted); font-size:.95rem; }
+
+/* Footer */
 .footer { border-top:1px solid var(--border); padding:34px 0; text-align:center; color:var(--text-muted); font-size:.9rem; }
+
+/* Forms */
 .form-group { margin-bottom:18px; }
 .form-group label { display:block; margin-bottom:6px; font-weight:600; font-size:.9rem; }
 .form-group input, .form-group select { width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:var(--bg); color:var(--text); font-size:1rem; }
 .form-group input:focus { outline:none; border-color:var(--violet); }
+
+/* Packs */
 .packs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px; margin:24px 0; }
 .pack { background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center; cursor:pointer; transition:all .2s; }
 .pack:hover { border-color:var(--violet); transform:translateY(-2px); }
 .pack .pack-name { font-weight:600; font-size:.95rem; display:flex; align-items:center; justify-content:center; gap:6px; }
 .pack .pack-name img { width:20px; height:20px; object-fit:contain; }
 .pack .pack-price { color:var(--violet); font-weight:700; margin-top:6px; }
+
+/* Alertes */
 .alert { padding:12px 16px; border-radius:12px; font-size:.95rem; margin-top:16px; }
 .alert.success { background:rgba(22,163,74,.1); color:var(--success); border:1px solid var(--success); }
 .alert.error { background:rgba(220,38,38,.1); color:var(--error); border:1px solid var(--error); }
+
+/* Filtres */
 .filters { display:flex; gap:16px; margin-bottom:32px; flex-wrap:wrap; }
 .filters input, .filters select { padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:var(--bg); color:var(--text); font-size:1rem; min-width:220px; }
+
+/* Fiche jeu */
 .back-link { display:inline-block; margin-bottom:20px; color:var(--violet); cursor:pointer; font-weight:600; }
 .game-header { display:flex; align-items:center; gap:18px; margin-bottom:10px; }
 .game-header h1 { font-size:2rem; }
-.cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:300; opacity:0; pointer-events:none; transition:opacity .25s; }
-.cart-overlay.open { opacity:1; pointer-events:auto; }
-.cart-panel { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.92); width:520px; max-width:92vw; max-height:85vh; background:var(--bg); border:1px solid var(--border); border-radius:20px; z-index:310; display:flex; flex-direction:column; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; }
-.cart-panel.open { opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
-.cart-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid var(--border); }
-.cart-header h2 { font-size:1.25rem; }
-.cart-close { background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--text); width:36px; height:36px; border-radius:50%; }
-.cart-close:hover { background:var(--bg-alt); }
-.cart-items { flex:1; overflow-y:auto; padding:16px 24px; }
-.cart-footer { padding:18px 24px; border-top:1px solid var(--border); }
-.cart-total { font-size:1.15rem; font-weight:700; margin-bottom:14px; display:flex; justify-content:space-between; }
-.cart-total span { color:var(--violet); }
-.cart-footer .btn { width:100%; }
+
+/* ===== PANIER POP-UP PRO ===== */
+.cart-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(4px);
+  z-index: 300;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.cart-overlay.open { opacity: 1; pointer-events: auto; }
+
+.cart-panel {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(.92);
+  width: 560px; max-width: 94vw; max-height: 88vh;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  z-index: 310;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0,0,0,.35);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s, transform .25s;
+  overflow: hidden;
+}
+.cart-panel.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+
+.cart-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: .06; filter: blur(2px);
+  z-index: 0; pointer-events: none;
+}
+.cart-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  height: 100%;
+}
+.cart-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 26px; border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(10px);
+}
+.cart-header h2 { font-size: 1.25rem; }
+.cart-close {
+  background: none; border: none; font-size: 1.4rem;
+  cursor: pointer; color: var(--text);
+  width: 36px; height: 36px; border-radius: 50%;
+  transition: background .2s;
+}
+.cart-close:hover { background: var(--bg-alt); }
+
+.cart-items { flex: 1; overflow-y: auto; padding: 20px 26px; }
+
+.cart-game-info {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px; margin-bottom: 18px;
+  background: var(--bg-alt); border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.cart-game-info .game-img-wrap { margin: 0; width: 56px; height: 56px; }
+.cart-game-info .game-img-wrap img { padding: 8px; }
+.cart-game-text strong { display: block; font-size: 1rem; }
+.cart-game-text span { color: var(--violet); font-weight: 700; font-size: 1.1rem; }
+
+.cart-footer {
+  padding: 20px 26px; border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(10px);
+}
+.cart-total {
+  font-size: 1.2rem; font-weight: 700; margin-bottom: 14px;
+  display: flex; justify-content: space-between;
+}
+.cart-total span { color: var(--violet); }
+.cart-footer .btn { width: 100%; }
+
 @media (max-width:640px) {
   .nav { gap:14px; font-size:.9rem; }
   .header-inner { height:auto; padding:12px 0; flex-wrap:wrap; }
   .game-header h1 { font-size:1.4rem; }
+  .cart-panel { width:96vw; }
+  .game-img-wrap.small { width:64px; height:64px; }
 }
 </style>
 </head>
@@ -205,16 +324,20 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
   <div class="container"><p>© 2026 Nexytop — Madagascar. Tous droits réservés.</p></div>
 </footer>
 
+<!-- ===== PANIER POP-UP PRO ===== -->
 <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
 <aside id="cart-panel" class="cart-panel">
-  <div class="cart-header">
-    <h2>Finaliser la commande</h2>
-    <button class="cart-close" onclick="closeCart()">✕</button>
-  </div>
-  <div class="cart-items" id="cart-form-zone"></div>
-  <div class="cart-footer">
-    <div class="cart-total">Total : <span id="cart-total">0 Ar</span></div>
-    <button id="cart-checkout" class="btn btn-primary">Valider la commande</button>
+  <div id="cart-bg" class="cart-bg"></div>
+  <div class="cart-content">
+    <div class="cart-header">
+      <h2>Finaliser la commande</h2>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cart-form-zone"></div>
+    <div class="cart-footer">
+      <div class="cart-total">Total : <span id="cart-total">0 Ar</span></div>
+      <button id="cart-checkout" class="btn btn-primary" onclick="validerCommande()">Valider la commande</button>
+    </div>
   </div>
 </aside>
 
@@ -304,7 +427,7 @@ const GAME_ICONS = {
 function prixEnAr(usd){return Math.ceil(usd*USD_TO_MGA*(1+MARGIN)/ROUND_TO)*ROUND_TO;}
 function formatAr(n){return n.toLocaleString('fr-FR')+' Ar';}
 
-/* ===== IMG JEU (logo adaptatif + fallback) ===== */
+/* ===== IMG JEU (adaptatif + fallback) ===== */
 function imgHTML(brand,small=false){
   const meta=GAME_ICONS[brand.slug]||{icon:'🎮',color:'#7C3AED'};
   const initials=brand.name.replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase();
@@ -330,41 +453,62 @@ function monnaieIconHTML(slug){
 let selectedPack=null;
 let currentBrand=null;
 
-function openCart(){document.getElementById('cart-panel').classList.add('open');document.getElementById('cart-overlay').classList.add('open');}
-function closeCart(){document.getElementById('cart-panel').classList.remove('open');document.getElementById('cart-overlay').classList.remove('open');}
+function openCart(){
+  document.getElementById('cart-panel').classList.add('open');
+  document.getElementById('cart-overlay').classList.add('open');
+}
+function closeCart(){
+  document.getElementById('cart-panel').classList.remove('open');
+  document.getElementById('cart-overlay').classList.remove('open');
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCart();});
 
 function selectPack(i){
   selectedPack=currentBrand.products[i];
   const priceAr=prixEnAr(selectedPack.usd);
   const labels={player_id:'Player ID',player_name:'Nom du joueur',phone:'Téléphone',uid:'UID',server:'Serveur',roblox_username:'Pseudo Roblox',steam_login:'Login Steam',amount_usd:'Montant (USD)',discord_username:'Pseudo Discord',telegram_username:'@username',email:'Email'};
+
+  // Fond d'image (icône du jeu)
+  const bg=document.getElementById('cart-bg');
+  bg.style.backgroundImage=`url('images/${currentBrand.slug}.png')`;
+
+  // Formulaire
   const fieldsHTML=currentBrand.fields.map(f=>`
     <div class="form-group">
       <label>${labels[f]||f}</label>
       <input type="text" name="${f}" required>
     </div>`).join('');
+
   document.getElementById('cart-form-zone').innerHTML=`
-    <div style="margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">
-      <strong>${currentBrand.name}</strong> — ${selectedPack.name}
-      <div style="color:var(--violet);font-weight:700;font-size:1.1rem;margin-top:4px;">${formatAr(priceAr)}</div>
+    <div class="cart-game-info">
+      ${imgHTML(currentBrand,false)}
+      <div class="cart-game-text">
+        <strong>${currentBrand.name}</strong>
+        <span>${selectedPack.name} — ${formatAr(priceAr)}</span>
+      </div>
     </div>
     <form id="cart-order-form">${fieldsHTML}</form>
   `;
+
   document.getElementById('cart-total').textContent=formatAr(priceAr);
   openCart();
 }
 
-document.getElementById('cart-checkout').onclick=async()=>{
+async function validerCommande(){
   if(!selectedPack){alert('Sélectionnez un pack.');return;}
   const fields={};
   const inputs=document.querySelectorAll('#cart-order-form input');
   for(const inp of inputs){
-    if(!inp.value.trim()){alert(`Remplissez le champ « ${inp.previousElementSibling.textContent} ».`);return;}
+    if(!inp.value.trim()){
+      alert(`Remplissez le champ « ${inp.previousElementSibling.textContent} ».`);
+      return;
+    }
     fields[inp.name]=inp.value.trim();
   }
   const priceAr=prixEnAr(selectedPack.usd);
   const btn=document.getElementById('cart-checkout');
   btn.disabled=true;btn.textContent='Envoi...';
+
   try{
     const {error}=await supabaseClient.from('commandes').insert({
       jeu:currentBrand.name,
@@ -375,18 +519,20 @@ document.getElementById('cart-checkout').onclick=async()=>{
       telephone:fields.phone||''
     });
     if(error)throw error;
+
     alert(`✅ Commande enregistrée !\n${currentBrand.name} — ${selectedPack.name} — ${formatAr(priceAr)}`);
     closeCart();
     selectedPack=null;
     document.getElementById('cart-form-zone').innerHTML='';
     document.getElementById('cart-total').textContent='0 Ar';
+    document.getElementById('cart-bg').style.backgroundImage='';
   }catch(err){
     console.error(err);
     alert('Erreur : '+(err.message||'réessayez.'));
   }finally{
     btn.disabled=false;btn.textContent='Valider la commande';
   }
-};
+}
 
 /* ===== NAVIGATION ===== */
 function naviguer(page){
