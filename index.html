@@ -57,10 +57,12 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
 .card:hover { transform:translateY(-5px); border-color:var(--violet); box-shadow:var(--shadow); }
 .card h3 { font-size:1rem; margin-bottom:6px; }
 .card .price { color:var(--violet); font-weight:700; font-size:.9rem; }
-.game-img-wrap { width:72px; height:72px; margin:0 auto 14px; border-radius:18px; background:linear-gradient(135deg, var(--game-color,var(--violet)), color-mix(in srgb, var(--game-color,var(--violet)) 60%, #000)); display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 14px color-mix(in srgb, var(--game-color,var(--violet)) 35%, transparent); }
+.game-img-wrap { width:72px; height:72px; margin:0 auto 14px; border-radius:18px; background:linear-gradient(135deg, var(--game-color,var(--violet)), color-mix(in srgb, var(--game-color,var(--violet)) 60%, #000)); display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 14px color-mix(in srgb, var(--game-color,var(--violet)) 35%, transparent); overflow:hidden; }
 .game-img-wrap.small { width:80px; height:80px; margin:0; }
+.game-img-wrap img { width:100%; height:100%; object-fit:contain; padding:10px; }
 .game-emoji { font-size:1.5rem; line-height:1; }
 .game-initials { font-size:.65rem; font-weight:800; color:#fff; letter-spacing:1px; margin-top:2px; }
+.game-fallback { flex-direction:column; align-items:center; }
 .features { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:22px; }
 .feature { background:var(--bg-alt); border:1px solid var(--border); border-radius:var(--radius); padding:30px 22px; text-align:center; }
 .feature-icon { font-size:2.2rem; margin-bottom:14px; }
@@ -74,7 +76,8 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
 .packs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px; margin:24px 0; }
 .pack { background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center; cursor:pointer; transition:all .2s; }
 .pack:hover { border-color:var(--violet); transform:translateY(-2px); }
-.pack .pack-name { font-weight:600; font-size:.95rem; }
+.pack .pack-name { font-weight:600; font-size:.95rem; display:flex; align-items:center; justify-content:center; gap:6px; }
+.pack .pack-name img { width:20px; height:20px; object-fit:contain; }
 .pack .pack-price { color:var(--violet); font-weight:700; margin-top:6px; }
 .alert { padding:12px 16px; border-radius:12px; font-size:.95rem; margin-top:16px; }
 .alert.success { background:rgba(22,163,74,.1); color:var(--success); border:1px solid var(--success); }
@@ -301,12 +304,26 @@ const GAME_ICONS = {
 function prixEnAr(usd){return Math.ceil(usd*USD_TO_MGA*(1+MARGIN)/ROUND_TO)*ROUND_TO;}
 function formatAr(n){return n.toLocaleString('fr-FR')+' Ar';}
 
-/* ===== IMG ===== */
+/* ===== IMG JEU (logo + fallback) ===== */
 function imgHTML(brand,small=false){
   const meta=GAME_ICONS[brand.slug]||{icon:'🎮',color:'#7C3AED'};
   const initials=brand.name.replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase();
   const cls=small?'game-img-wrap small':'game-img-wrap';
-  return `<div class="${cls}" style="--game-color:${meta.color};"><span class="game-emoji">${meta.icon}</span><span class="game-initials">${initials}</span></div>`;
+  return `
+    <div class="${cls}" style="--game-color:${meta.color};">
+      <img src="images/${brand.slug}.png" alt="${brand.name}"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+      <span class="game-fallback" style="display:none;">
+        <span class="game-emoji">${meta.icon}</span>
+        <span class="game-initials">${initials}</span>
+      </span>
+    </div>`;
+}
+
+/* ===== ICONE MONNAIE (masquée si absente) ===== */
+function monnaieIconHTML(slug){
+  return `<img src="images/monnaie-${slug}.png" alt=""
+    onerror="this.style.display='none';">`;
 }
 
 /* ===== PANIER / FORMULAIRE ===== */
@@ -317,19 +334,15 @@ function openCart(){document.getElementById('cart-panel').classList.add('open');
 function closeCart(){document.getElementById('cart-panel').classList.remove('open');document.getElementById('cart-overlay').classList.remove('open');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCart();});
 
-/* Clic sur un pack : ouvre le panier avec le formulaire */
 function selectPack(i){
   selectedPack=currentBrand.products[i];
   const priceAr=prixEnAr(selectedPack.usd);
-
   const labels={player_id:'Player ID',player_name:'Nom du joueur',phone:'Téléphone',uid:'UID',server:'Serveur',roblox_username:'Pseudo Roblox',steam_login:'Login Steam',amount_usd:'Montant (USD)',discord_username:'Pseudo Discord',telegram_username:'@username',email:'Email'};
-
   const fieldsHTML=currentBrand.fields.map(f=>`
     <div class="form-group">
       <label>${labels[f]||f}</label>
       <input type="text" name="${f}" required>
     </div>`).join('');
-
   document.getElementById('cart-form-zone').innerHTML=`
     <div style="margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">
       <strong>${currentBrand.name}</strong> — ${selectedPack.name}
@@ -337,12 +350,10 @@ function selectPack(i){
     </div>
     <form id="cart-order-form">${fieldsHTML}</form>
   `;
-
   document.getElementById('cart-total').textContent=formatAr(priceAr);
   openCart();
 }
 
-/* Validation : envoi à Supabase */
 document.getElementById('cart-checkout').onclick=async()=>{
   if(!selectedPack){alert('Sélectionnez un pack.');return;}
   const fields={};
@@ -354,7 +365,6 @@ document.getElementById('cart-checkout').onclick=async()=>{
   const priceAr=prixEnAr(selectedPack.usd);
   const btn=document.getElementById('cart-checkout');
   btn.disabled=true;btn.textContent='Envoi...';
-
   try{
     const {error}=await supabaseClient.from('commandes').insert({
       jeu:currentBrand.name,
@@ -365,7 +375,6 @@ document.getElementById('cart-checkout').onclick=async()=>{
       telephone:fields.phone||''
     });
     if(error)throw error;
-
     alert(`✅ Commande enregistrée !\n${currentBrand.name} — ${selectedPack.name} — ${formatAr(priceAr)}`);
     closeCart();
     selectedPack=null;
@@ -431,7 +440,7 @@ function ouvrirJeu(slug){
   document.getElementById('game-image').innerHTML=imgHTML(brand,true);
   document.getElementById('packs').innerHTML=brand.products.map((p,i)=>`
     <div class="pack" data-index="${i}" onclick="selectPack(${i})">
-      <div class="pack-name">${p.name}</div>
+      <div class="pack-name">${monnaieIconHTML(brand.slug)}${p.name}</div>
       <div class="pack-price">${formatAr(prixEnAr(p.usd))}</div>
     </div>`).join('');
 }
