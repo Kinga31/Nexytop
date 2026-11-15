@@ -171,6 +171,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   font-weight: 800; font-size: .9rem;
 }
 
+/* ===== PACKS avec icône monnaie GRANDE ===== */
 .packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; margin-top: 28px; }
 .pack {
   background: var(--bg2);
@@ -186,10 +187,16 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   box-shadow: 0 16px 40px color-mix(in srgb, var(--violet) 25%, transparent);
 }
 .pack-name {
-  font-weight: 700; font-size: .92rem;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-weight: 700; font-size: .95rem;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  line-height: 1.2;
 }
-.pack-name img { width: 20px; height: 20px; object-fit: contain; }
+.pack-name img {
+  width: 28px; height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+}
 .pack-price {
   background: linear-gradient(135deg, var(--violet), var(--violet3));
   -webkit-background-clip: text; background-clip: text;
@@ -197,7 +204,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   font-weight: 800; margin-top: 8px; font-size: 1.05rem;
 }
 
-/* ===== PANIER CORRIGÉ ===== */
+/* ===== PANIER ===== */
 .overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.4);
@@ -210,7 +217,6 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   position: fixed; top: 50%; left: 50%;
   transform: translate(-50%,-50%) scale(.9);
   width: 540px; max-width: 94vw;
-  /* HAUTEUR FIXE pour que le scroll fonctionne */
   height: 85vh; max-height: 700px;
   background: var(--glass);
   border: 1px solid color-mix(in srgb, var(--violet) 30%, transparent);
@@ -249,7 +255,6 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
 }
 .cart-close:hover { border-color: var(--violet); color: var(--violet); transform: rotate(90deg); }
 
-/* Zone scrollable */
 .cart-body {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -271,7 +276,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   border-radius: 18px;
   backdrop-filter: blur(20px);
 }
-.cart-info .game-img { width: 60px; height: 60px; margin: 0; border-radius: 14px; }
+.cart-info .game-img { width: 64px; height: 64px; margin: 0; border-radius: 16px; flex-shrink: 0; }
 .cart-info strong { display: block; font-size: 1.05rem; font-weight: 800; }
 .cart-info .pack-label {
   background: linear-gradient(135deg, var(--violet), var(--violet3));
@@ -344,6 +349,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   nav a.active::after { display: none; }
   .cart { width: 96vw; height: 90vh; }
   .hero h1 { font-size: 1.9rem; }
+  .pack-name img { width: 24px; height: 24px; }
 }
 </style>
 </head>
