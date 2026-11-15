@@ -16,7 +16,42 @@
   --shadow-lg: 0 30px 80px rgba(0,0,0,.7);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* ===== FOND DE PAGE : LOGOS EN FILIGRANE ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url('images/free-fire.png'),
+    url('images/pubg-mobile.png'),
+    url('images/mobile-legends.png'),
+    url('images/roblox.png'),
+    url('images/genshin-impact.png'),
+    url('images/delta-force.png'),
+    url('images/minecraft.png'),
+    url('images/discord.png'),
+    url('images/telegram-premium.png'),
+    url('images/steam.png');
+  background-size: 120px;
+  background-position:
+    5% 10%, 85% 15%, 15% 80%, 90% 75%, 50% 5%,
+    30% 40%, 70% 45%, 10% 55%, 60% 90%, 40% 95%;
+  background-repeat: no-repeat;
+  opacity: 0.05;
+  z-index: -1;
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
 .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
 /* Header */
@@ -61,7 +96,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5
 .game-card:hover::before { opacity: .06; }
 .game-card > * { position: relative; z-index: 1; }
 
-/* LOGO CARRÉ — object-fit: cover force le carré */
+/* LOGO CARRÉ — object-fit: cover */
 .game-img {
   width: 84px; height: 84px; margin: 0 auto 14px;
   border-radius: 20px; overflow: hidden;
@@ -71,7 +106,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5
 }
 .game-img img {
   width: 100%; height: 100%;
-  object-fit: cover;  /* ← FORCE LE CARRÉ, remplit tout */
+  object-fit: cover;
   display: block;
 }
 .game-img .emoji { font-size: 2.4rem; }
@@ -90,7 +125,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5
 .pack-name img { width: 20px; height: 20px; object-fit: contain; }
 .pack-price { color: var(--violet); font-weight: 800; margin-top: 8px; font-size: 1rem; }
 
-/* Panier — fond d'image INTENSE */
+/* Panier */
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); backdrop-filter: blur(8px); z-index: 100; opacity: 0; pointer-events: none; transition: .3s; }
 .overlay.open { opacity: 1; pointer-events: auto; }
 
@@ -107,7 +142,6 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5
 }
 .cart.open { opacity: 1; pointer-events: auto; transform: translate(-50%,-50%) scale(1); }
 
-/* Fond d'image du jeu — INTENSE */
 .cart-bg {
   position: absolute; inset: 0;
   background-size: 70%; background-position: center; background-repeat: no-repeat;
@@ -117,7 +151,6 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5
 }
 [data-theme="dark"] .cart-bg { opacity: .3; }
 
-/* Dégradé pour lisibilité */
 .cart::after {
   content: ''; position: absolute; inset: 0;
   background: linear-gradient(180deg,
@@ -129,17 +162,13 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5
 
 .cart-content { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; }
 
-.cart-head {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 22px 26px;
-}
+.cart-head { display: flex; justify-content: space-between; align-items: center; padding: 22px 26px; }
 .cart-head h2 { font-size: 1.2rem; font-weight: 800; letter-spacing: -.3px; }
 .cart-close { background: color-mix(in srgb, var(--bg2) 80%, transparent); border: 1px solid var(--border); width: 38px; height: 38px; border-radius: 12px; font-size: 1rem; cursor: pointer; color: var(--text); transition: .2s; backdrop-filter: blur(10px); }
 .cart-close:hover { border-color: var(--violet); color: var(--violet); transform: rotate(90deg); }
 
 .cart-body { flex: 1; overflow-y: auto; padding: 8px 26px 22px; }
 
-/* Info jeu */
 .cart-info {
   display: flex; align-items: center; gap: 16px;
   padding: 18px; margin-bottom: 22px;
@@ -188,6 +217,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -.5
   nav a.active::after { display: none; }
   .cart { width: 96vw; }
   .hero h1 { font-size: 1.8rem; }
+  body::before { background-size: 70px; opacity: 0.04; }
 }
 </style>
 </head>
