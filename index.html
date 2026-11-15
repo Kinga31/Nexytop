@@ -304,7 +304,7 @@ const GAME_ICONS = {
 function prixEnAr(usd){return Math.ceil(usd*USD_TO_MGA*(1+MARGIN)/ROUND_TO)*ROUND_TO;}
 function formatAr(n){return n.toLocaleString('fr-FR')+' Ar';}
 
-/* ===== IMG JEU (logo + fallback) ===== */
+/* ===== IMG JEU (logo adaptatif + fallback) ===== */
 function imgHTML(brand,small=false){
   const meta=GAME_ICONS[brand.slug]||{icon:'🎮',color:'#7C3AED'};
   const initials=brand.name.replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase();
