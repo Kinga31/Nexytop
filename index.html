@@ -74,10 +74,8 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
 .packs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px; margin:24px 0; }
 .pack { background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center; cursor:pointer; transition:all .2s; }
 .pack:hover { border-color:var(--violet); transform:translateY(-2px); }
-.pack.selected { border-color:var(--violet); background:var(--violet); color:#fff; }
 .pack .pack-name { font-weight:600; font-size:.95rem; }
 .pack .pack-price { color:var(--violet); font-weight:700; margin-top:6px; }
-.pack.selected .pack-price { color:#fff; }
 .alert { padding:12px 16px; border-radius:12px; font-size:.95rem; margin-top:16px; }
 .alert.success { background:rgba(22,163,74,.1); color:var(--success); border:1px solid var(--success); }
 .alert.error { background:rgba(220,38,38,.1); color:var(--error); border:1px solid var(--error); }
@@ -86,8 +84,6 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
 .back-link { display:inline-block; margin-bottom:20px; color:var(--violet); cursor:pointer; font-weight:600; }
 .game-header { display:flex; align-items:center; gap:18px; margin-bottom:10px; }
 .game-header h1 { font-size:2rem; }
-.order-box { background:var(--bg-alt); border:1px solid var(--border); border-radius:var(--radius); padding:28px; margin-top:40px; }
-.order-box h2 { margin-bottom:20px; font-size:1.4rem; }
 .cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:300; opacity:0; pointer-events:none; transition:opacity .25s; }
 .cart-overlay.open { opacity:1; pointer-events:auto; }
 .cart-panel { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.92); width:520px; max-width:92vw; max-height:85vh; background:var(--bg); border:1px solid var(--border); border-radius:20px; z-index:310; display:flex; flex-direction:column; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; }
@@ -97,13 +93,6 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
 .cart-close { background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--text); width:36px; height:36px; border-radius:50%; }
 .cart-close:hover { background:var(--bg-alt); }
 .cart-items { flex:1; overflow-y:auto; padding:16px 24px; }
-.cart-item { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px; margin-bottom:10px; background:var(--bg-alt); border:1px solid var(--border); border-radius:12px; }
-.cart-item-info { flex:1; }
-.cart-item-name { font-weight:600; font-size:.95rem; }
-.cart-item-game { color:var(--text-muted); font-size:.82rem; }
-.cart-item-price { color:var(--violet); font-weight:700; font-size:.9rem; margin-top:4px; }
-.cart-item-remove { background:none; border:none; color:var(--error); cursor:pointer; font-size:1.1rem; width:32px; height:32px; border-radius:8px; }
-.cart-item-remove:hover { background:rgba(220,38,38,.1); }
 .cart-footer { padding:18px 24px; border-top:1px solid var(--border); }
 .cart-total { font-size:1.15rem; font-weight:700; margin-bottom:14px; display:flex; justify-content:space-between; }
 .cart-total span { color:var(--violet); }
@@ -179,27 +168,15 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
         <h1 id="game-title">Chargement...</h1>
       </div>
       <div id="packs" class="packs-grid"></div>
-      <div class="order-box">
-        <h2>Commander</h2>
-        <form id="order-form">
-          <div id="dynamic-fields"></div>
-          <div class="form-group">
-            <label>Prix total</label>
-            <input type="text" id="total-price" readonly>
-          </div>
-          <button type="submit" class="btn btn-primary">Ajouter au panier</button>
-        </form>
-        <div id="order-message" class="alert" style="display:none;"></div>
-      </div>
     </div>
   </section>
 
   <section id="page-suivi" class="page">
     <div class="container section">
       <h1>Suivi de commande</h1>
-      <p>Entrez votre numéro de commande (ex. NX-2026-0001).</p>
+      <p>Entrez votre numéro de commande (ex. 1, 2, 3...).</p>
       <form id="track-form" class="form-group">
-        <input type="text" id="order-id" placeholder="NX-2026-0001" required>
+        <input type="text" id="order-id" placeholder="Numéro de commande" required>
         <button type="submit" class="btn btn-primary" style="margin-top:12px;">Suivre</button>
       </form>
       <div id="track-result" class="alert" style="display:none;"></div>
@@ -228,13 +205,13 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
 <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
 <aside id="cart-panel" class="cart-panel">
   <div class="cart-header">
-    <h2>Mon panier</h2>
+    <h2>Finaliser la commande</h2>
     <button class="cart-close" onclick="closeCart()">✕</button>
   </div>
-  <div id="cart-items" class="cart-items"></div>
+  <div class="cart-items" id="cart-form-zone"></div>
   <div class="cart-footer">
     <div class="cart-total">Total : <span id="cart-total">0 Ar</span></div>
-    <button id="cart-checkout" class="btn btn-primary">Commander</button>
+    <button id="cart-checkout" class="btn btn-primary">Valider la commande</button>
   </div>
 </aside>
 
@@ -332,60 +309,73 @@ function imgHTML(brand,small=false){
   return `<div class="${cls}" style="--game-color:${meta.color};"><span class="game-emoji">${meta.icon}</span><span class="game-initials">${initials}</span></div>`;
 }
 
-/* ===== PANIER ===== */
-let CART=[];
-try{CART=JSON.parse(localStorage.getItem('nexytop-cart')||'[]');}catch{CART=[];}
-function saveCart(){localStorage.setItem('nexytop-cart',JSON.stringify(CART));}
-function updateCartBadge(){const b=document.getElementById('cart-count');if(b)b.textContent=CART.reduce((s,i)=>s+i.qty,0);}
-function renderCart(){
-  const itemsEl=document.getElementById('cart-items'),totalEl=document.getElementById('cart-total');
-  if(!CART.length){itemsEl.innerHTML='<p style="color:var(--text-muted);text-align:center;padding:40px 0;">Votre panier est vide.</p>';totalEl.textContent='0 Ar';updateCartBadge();return;}
-  itemsEl.innerHTML=CART.map((item,i)=>`
-    <div class="cart-item">
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.pack} <span style="color:var(--text-muted)">×${item.qty}</span></div>
-        <div class="cart-item-game">${item.game}</div>
-        <div class="cart-item-price">${formatAr(item.priceAr*item.qty)}</div>
-      </div>
-      <button class="cart-item-remove" onclick="removeFromCart(${i})">🗑️</button>
-    </div>`).join('');
-  totalEl.textContent=formatAr(CART.reduce((s,i)=>s+i.priceAr*i.qty,0));
-  updateCartBadge();
-}
-function addToCart(game,pack,priceAr,fields){
-  const ex=CART.find(i=>i.game===game&&i.pack===pack&&JSON.stringify(i.fields)===JSON.stringify(fields));
-  if(ex)ex.qty++;else CART.push({game,pack,priceAr,qty:1,fields:fields||{}});
-  saveCart();renderCart();openCart();
-}
-function removeFromCart(i){CART.splice(i,1);saveCart();renderCart();}
+/* ===== PANIER / FORMULAIRE ===== */
+let selectedPack=null;
+let currentBrand=null;
+
 function openCart(){document.getElementById('cart-panel').classList.add('open');document.getElementById('cart-overlay').classList.add('open');}
 function closeCart(){document.getElementById('cart-panel').classList.remove('open');document.getElementById('cart-overlay').classList.remove('open');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCart();});
 
-/* ===== COMMANDE SUPABASE ===== */
+/* Clic sur un pack : ouvre le panier avec le formulaire */
+function selectPack(i){
+  selectedPack=currentBrand.products[i];
+  const priceAr=prixEnAr(selectedPack.usd);
+
+  const labels={player_id:'Player ID',player_name:'Nom du joueur',phone:'Téléphone',uid:'UID',server:'Serveur',roblox_username:'Pseudo Roblox',steam_login:'Login Steam',amount_usd:'Montant (USD)',discord_username:'Pseudo Discord',telegram_username:'@username',email:'Email'};
+
+  const fieldsHTML=currentBrand.fields.map(f=>`
+    <div class="form-group">
+      <label>${labels[f]||f}</label>
+      <input type="text" name="${f}" required>
+    </div>`).join('');
+
+  document.getElementById('cart-form-zone').innerHTML=`
+    <div style="margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+      <strong>${currentBrand.name}</strong> — ${selectedPack.name}
+      <div style="color:var(--violet);font-weight:700;font-size:1.1rem;margin-top:4px;">${formatAr(priceAr)}</div>
+    </div>
+    <form id="cart-order-form">${fieldsHTML}</form>
+  `;
+
+  document.getElementById('cart-total').textContent=formatAr(priceAr);
+  openCart();
+}
+
+/* Validation : envoi à Supabase */
 document.getElementById('cart-checkout').onclick=async()=>{
-  if(!CART.length){alert('Votre panier est vide.');return;}
+  if(!selectedPack){alert('Sélectionnez un pack.');return;}
+  const fields={};
+  const inputs=document.querySelectorAll('#cart-order-form input');
+  for(const inp of inputs){
+    if(!inp.value.trim()){alert(`Remplissez le champ « ${inp.previousElementSibling.textContent} ».`);return;}
+    fields[inp.name]=inp.value.trim();
+  }
+  const priceAr=prixEnAr(selectedPack.usd);
   const btn=document.getElementById('cart-checkout');
   btn.disabled=true;btn.textContent='Envoi...';
+
   try{
-    for(const item of CART){
-      const {error}=await supabaseClient.from('commandes').insert({
-        jeu:item.game,
-        pack:item.pack,
-        prix_ar:item.priceAr*item.qty,
-        player_id:item.fields.player_id||item.fields.uid||item.fields.roblox_username||item.fields.telegram_username||item.fields.steam_login||item.fields.email||'',
-        nom_joueur:item.fields.player_name||item.fields.discord_username||'',
-        telephone:item.fields.phone||''
-      });
-      if(error)throw error;
-    }
-    alert('✅ Commande enregistrée ! Nous vous contacterons bientôt.');
-    CART=[];saveCart();renderCart();closeCart();
+    const {error}=await supabaseClient.from('commandes').insert({
+      jeu:currentBrand.name,
+      pack:selectedPack.name,
+      prix_ar:priceAr,
+      player_id:fields.player_id||fields.uid||fields.roblox_username||fields.telegram_username||fields.steam_login||fields.email||'',
+      nom_joueur:fields.player_name||fields.discord_username||'',
+      telephone:fields.phone||''
+    });
+    if(error)throw error;
+
+    alert(`✅ Commande enregistrée !\n${currentBrand.name} — ${selectedPack.name} — ${formatAr(priceAr)}`);
+    closeCart();
+    selectedPack=null;
+    document.getElementById('cart-form-zone').innerHTML='';
+    document.getElementById('cart-total').textContent='0 Ar';
   }catch(err){
     console.error(err);
     alert('Erreur : '+(err.message||'réessayez.'));
   }finally{
-    btn.disabled=false;btn.textContent='Commander';
+    btn.disabled=false;btn.textContent='Valider la commande';
   }
 };
 
@@ -431,8 +421,7 @@ function initCatalogue(){
   render();
 }
 
-/* ===== JEU ===== */
-let selectedPack=null,currentBrand=null;
+/* ===== FICHE JEU ===== */
 function ouvrirJeu(slug){
   naviguer('jeu');
   const brand=DATA.brands.find(b=>b.slug===slug);
@@ -440,38 +429,12 @@ function ouvrirJeu(slug){
   currentBrand=brand;selectedPack=null;
   document.getElementById('game-title').textContent=brand.name;
   document.getElementById('game-image').innerHTML=imgHTML(brand,true);
-  const labels={player_id:'Player ID',player_name:'Nom du joueur',phone:'Téléphone',uid:'UID',server:'Serveur',roblox_username:'Pseudo Roblox',steam_login:'Login Steam',amount_usd:'Montant (USD)',discord_username:'Pseudo Discord',telegram_username:'@username',email:'Email'};
-  document.getElementById('dynamic-fields').innerHTML=brand.fields.map(f=>`<div class="form-group"><label>${labels[f]||f}</label><input type="text" name="${f}" required></div>`).join('');
   document.getElementById('packs').innerHTML=brand.products.map((p,i)=>`
     <div class="pack" data-index="${i}" onclick="selectPack(${i})">
       <div class="pack-name">${p.name}</div>
       <div class="pack-price">${formatAr(prixEnAr(p.usd))}</div>
     </div>`).join('');
-  document.getElementById('total-price').value='';
-  document.getElementById('order-message').style.display='none';
 }
-function selectPack(i){
-  document.querySelectorAll('#packs .pack').forEach(x=>x.classList.remove('selected'));
-  const el=document.querySelector(`#packs .pack[data-index="${i}"]`);
-  el.classList.add('selected');
-  selectedPack=currentBrand.products[i];
-  document.getElementById('total-price').value=formatAr(prixEnAr(selectedPack.usd));
-}
-document.getElementById('order-form').onsubmit=(e)=>{
-  e.preventDefault();
-  const msg=document.getElementById('order-message');
-  if(!selectedPack){msg.className='alert error';msg.textContent='Sélectionnez un pack.';msg.style.display='block';return;}
-  const fields={};
-  for(const inp of document.querySelectorAll('#dynamic-fields input')){
-    if(!inp.value.trim()){msg.className='alert error';msg.textContent=`Remplissez « ${inp.previousElementSibling.textContent} ».`;msg.style.display='block';return;}
-    fields[inp.name]=inp.value.trim();
-  }
-  addToCart(currentBrand.name,selectedPack.name,prixEnAr(selectedPack.usd),fields);
-  msg.className='alert success';msg.textContent=`« ${selectedPack.name} » ajouté au panier.`;msg.style.display='block';
-  document.querySelectorAll('#dynamic-fields input').forEach(i=>i.value='');
-  document.querySelectorAll('#packs .pack').forEach(x=>x.classList.remove('selected'));
-  selectedPack=null;document.getElementById('total-price').value='';
-};
 
 /* ===== SUIVI ===== */
 document.getElementById('track-form').onsubmit=async(e)=>{
@@ -483,7 +446,7 @@ document.getElementById('track-form').onsubmit=async(e)=>{
     if(error)throw error;
     if(data&&data.length){
       res.className='alert success';
-      res.textContent=`Commande ${id} : ${data[0].statut} — ${formatAr(data[0].prix_ar)}`;
+      res.textContent=`Commande n°${id} : ${data[0].statut} — ${formatAr(data[0].prix_ar)}`;
     }else{
       res.className='alert error';
       res.textContent='Commande introuvable.';
@@ -506,7 +469,6 @@ document.getElementById('contact-form').onsubmit=(e)=>{
 /* ===== INIT ===== */
 initAccueil();
 initCatalogue();
-renderCart();
 </script>
 </body>
 </html>
