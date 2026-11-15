@@ -171,13 +171,13 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   font-weight: 800; font-size: .9rem;
 }
 
-/* ===== PACKS avec icône monnaie GRANDE ===== */
-.packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; margin-top: 28px; }
+/* ===== PACKS avec icône monnaie 36px ===== */
+.packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-top: 28px; }
 .pack {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 20px 16px; text-align: center; cursor: pointer;
+  padding: 22px 16px; text-align: center; cursor: pointer;
   transition: all .3s; backdrop-filter: blur(20px);
   position: relative; overflow: hidden;
 }
@@ -187,12 +187,12 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   box-shadow: 0 16px 40px color-mix(in srgb, var(--violet) 25%, transparent);
 }
 .pack-name {
-  font-weight: 700; font-size: .95rem;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  line-height: 1.2;
+  font-weight: 700; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  line-height: 1.3;
 }
 .pack-name img {
-  width: 28px; height: 28px;
+  width: 36px; height: 36px;
   object-fit: contain;
   flex-shrink: 0;
   display: block;
@@ -201,7 +201,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   background: linear-gradient(135deg, var(--violet), var(--violet3));
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: 800; margin-top: 8px; font-size: 1.05rem;
+  font-weight: 800; margin-top: 10px; font-size: 1.1rem;
 }
 
 /* ===== PANIER ===== */
@@ -276,7 +276,8 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   border-radius: 18px;
   backdrop-filter: blur(20px);
 }
-.cart-info .game-img { width: 64px; height: 64px; margin: 0; border-radius: 16px; flex-shrink: 0; }
+/* Icône du jeu dans le panier — 72px */
+.cart-info .game-img { width: 72px; height: 72px; margin: 0; border-radius: 18px; flex-shrink: 0; }
 .cart-info strong { display: block; font-size: 1.05rem; font-weight: 800; }
 .cart-info .pack-label {
   background: linear-gradient(135deg, var(--violet), var(--violet3));
@@ -349,7 +350,8 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
   nav a.active::after { display: none; }
   .cart { width: 96vw; height: 90vh; }
   .hero h1 { font-size: 1.9rem; }
-  .pack-name img { width: 24px; height: 24px; }
+  .pack-name img { width: 30px; height: 30px; }
+  .pack-name { font-size: .92rem; gap: 8px; }
 }
 </style>
 </head>
