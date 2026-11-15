@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexytop — Recharges de jeux à Madagascar</title>
+<style>
+:root {
+  --violet: #7C3AED; --violet-hover: #6D28D9; --violet-soft: rgba(124,58,237,.1);
+  --bg: #FFF; --bg-alt: #F7F5FF; --bg-card: #FFF;
+  --text: #14121F; --text-muted: #5B5870; --border: #E8E5F3;
+  --success: #16A34A; --error: #DC2626;
+  --shadow: 0 8px 28px rgba(124,58,237,.12); --radius: 16px;
+}
+[data-theme="dark"] {
+  --violet: #8B5CF6; --violet-hover: #7C3AED; --violet-soft: rgba(139,92,246,.15);
+  --bg: #0B0A10; --bg-alt: #15131F; --bg-card: #1A1726;
+  --text: #F5F4FA; --text-muted: #A29FBD; --border: #2A2640;
+  --success: #22C55E; --error: #F87171;
+  --shadow: 0 8px 28px rgba(0,0,0,.55);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; transition:background .3s,color .3s; }
+.container { max-width:1200px; margin:0 auto; padding:0 20px; }
+.accent { color:var(--violet); }
+.header { background:var(--bg); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.header-inner { display:flex; align-items:center; justify-content:space-between; height:72px; gap:20px; }
+.logo { font-size:1.6rem; font-weight:800; letter-spacing:1px; cursor:pointer; }
+.logo span { color:var(--violet); }
+.nav { display:flex; gap:26px; }
+.nav a { color:var(--text-muted); text-decoration:none; font-weight:500; cursor:pointer; }
+.nav a:hover, .nav a.active { color:var(--violet); }
+.header-actions { display:flex; gap:10px; }
+.icon-btn { background:var(--bg-alt); border:1px solid var(--border); border-radius:50%; width:42px; height:42px; cursor:pointer; font-size:1.1rem; position:relative; }
+.icon-btn:hover { background:var(--violet-soft); }
+.cart-badge { position:absolute; top:-4px; right:-4px; background:var(--violet); color:#fff; border-radius:50%; font-size:.65rem; font-weight:700; min-width:18px; height:18px; display:flex; align-items:center; justify-content:center; padding:0 4px; }
+.page { display:none; }
+.page.active { display:block; }
+.hero { background:radial-gradient(ellipse at top, var(--violet-soft), transparent 60%); padding:90px 0 70px; text-align:center; }
+.hero-badge { display:inline-block; background:var(--violet-soft); color:var(--violet); padding:6px 16px; border-radius:999px; font-size:.85rem; font-weight:600; margin-bottom:20px; }
+.hero h1 { font-size:clamp(2rem,5vw,3.2rem); font-weight:800; margin-bottom:18px; line-height:1.2; }
+.hero p { color:var(--text-muted); font-size:1.1rem; margin-bottom:32px; }
+.hero-actions { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.btn { display:inline-block; padding:13px 30px; border-radius:12px; font-weight:600; cursor:pointer; border:none; font-size:1rem; transition:all .2s; }
+.btn-primary { background:var(--violet); color:#fff; }
+.btn-primary:hover { background:var(--violet-hover); transform:translateY(-2px); }
+.btn-outline { background:transparent; color:var(--violet); border:2px solid var(--violet); }
+.btn-outline:hover { background:var(--violet-soft); }
+.btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+.section { padding:60px 20px; }
+.section h2 { font-size:1.8rem; margin-bottom:28px; }
+.section-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+.section-head h2 { margin:0; }
+.link-more { color:var(--violet); cursor:pointer; font-weight:600; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:20px; }
+.card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:22px 18px; text-align:center; cursor:pointer; transition:all .25s; }
+.card:hover { transform:translateY(-5px); border-color:var(--violet); box-shadow:var(--shadow); }
+.card h3 { font-size:1rem; margin-bottom:6px; }
+.card .price { color:var(--violet); font-weight:700; font-size:.9rem; }
+.game-img-wrap { width:72px; height:72px; margin:0 auto 14px; border-radius:18px; background:linear-gradient(135deg, var(--game-color,var(--violet)), color-mix(in srgb, var(--game-color,var(--violet)) 60%, #000)); display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 14px color-mix(in srgb, var(--game-color,var(--violet)) 35%, transparent); }
+.game-img-wrap.small { width:80px; height:80px; margin:0; }
+.game-emoji { font-size:1.5rem; line-height:1; }
+.game-initials { font-size:.65rem; font-weight:800; color:#fff; letter-spacing:1px; margin-top:2px; }
+.features { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:22px; }
+.feature { background:var(--bg-alt); border:1px solid var(--border); border-radius:var(--radius); padding:30px 22px; text-align:center; }
+.feature-icon { font-size:2.2rem; margin-bottom:14px; }
+.feature h3 { margin-bottom:8px; font-size:1.1rem; }
+.feature p { color:var(--text-muted); font-size:.95rem; }
+.footer { border-top:1px solid var(--border); padding:34px 0; text-align:center; color:var(--text-muted); font-size:.9rem; }
+.form-group { margin-bottom:18px; }
+.form-group label { display:block; margin-bottom:6px; font-weight:600; font-size:.9rem; }
+.form-group input, .form-group select { width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:var(--bg); color:var(--text); font-size:1rem; }
+.form-group input:focus { outline:none; border-color:var(--violet); }
+.packs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px; margin:24px 0; }
+.pack { background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center; cursor:pointer; transition:all .2s; }
+.pack:hover { border-color:var(--violet); transform:translateY(-2px); }
+.pack.selected { border-color:var(--violet); background:var(--violet); color:#fff; }
+.pack .pack-name { font-weight:600; font-size:.95rem; }
+.pack .pack-price { color:var(--violet); font-weight:700; margin-top:6px; }
+.pack.selected .pack-price { color:#fff; }
+.alert { padding:12px 16px; border-radius:12px; font-size:.95rem; margin-top:16px; }
+.alert.success { background:rgba(22,163,74,.1); color:var(--success); border:1px solid var(--success); }
+.alert.error { background:rgba(220,38,38,.1); color:var(--error); border:1px solid var(--error); }
+.filters { display:flex; gap:16px; margin-bottom:32px; flex-wrap:wrap; }
+.filters input, .filters select { padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:var(--bg); color:var(--text); font-size:1rem; min-width:220px; }
+.back-link { display:inline-block; margin-bottom:20px; color:var(--violet); cursor:pointer; font-weight:600; }
+.game-header { display:flex; align-items:center; gap:18px; margin-bottom:10px; }
+.game-header h1 { font-size:2rem; }
+.order-box { background:var(--bg-alt); border:1px solid var(--border); border-radius:var(--radius); padding:28px; margin-top:40px; }
+.order-box h2 { margin-bottom:20px; font-size:1.4rem; }
+.cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:300; opacity:0; pointer-events:none; transition:opacity .25s; }
+.cart-overlay.open { opacity:1; pointer-events:auto; }
+.cart-panel { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.92); width:520px; max-width:92vw; max-height:85vh; background:var(--bg); border:1px solid var(--border); border-radius:20px; z-index:310; display:flex; flex-direction:column; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; }
+.cart-panel.open { opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
+.cart-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid var(--border); }
+.cart-header h2 { font-size:1.25rem; }
+.cart-close { background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--text); width:36px; height:36px; border-radius:50%; }
+.cart-close:hover { background:var(--bg-alt); }
+.cart-items { flex:1; overflow-y:auto; padding:16px 24px; }
+.cart-item { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px; margin-bottom:10px; background:var(--bg-alt); border:1px solid var(--border); border-radius:12px; }
+.cart-item-info { flex:1; }
+.cart-item-name { font-weight:600; font-size:.95rem; }
+.cart-item-game { color:var(--text-muted); font-size:.82rem; }
+.cart-item-price { color:var(--violet); font-weight:700; font-size:.9rem; margin-top:4px; }
+.cart-item-remove { background:none; border:none; color:var(--error); cursor:pointer; font-size:1.1rem; width:32px; height:32px; border-radius:8px; }
+.cart-item-remove:hover { background:rgba(220,38,38,.1); }
+.cart-footer { padding:18px 24px; border-top:1px solid var(--border); }
+.cart-total { font-size:1.15rem; font-weight:700; margin-bottom:14px; display:flex; justify-content:space-between; }
+.cart-total span { color:var(--violet); }
+.cart-footer .btn { width:100%; }
+@media (max-width:640px) {
+  .nav { gap:14px; font-size:.9rem; }
+  .header-inner { height:auto; padding:12px 0; flex-wrap:wrap; }
+  .game-header h1 { font-size:1.4rem; }
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="container header-inner">
+    <div class="logo" onclick="naviguer('accueil')">NEXY<span>TOP</span></div>
+    <nav class="nav">
+      <a onclick="naviguer('accueil')" data-page="accueil" class="active">Accueil</a>
+      <a onclick="naviguer('catalogue')" data-page="catalogue">Catalogue</a>
+      <a onclick="naviguer('suivi')" data-page="suivi">Suivi</a>
+      <a onclick="naviguer('contact')" data-page="contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button id="cart-btn" class="icon-btn" onclick="openCart()">🛒<span id="cart-count" class="cart-badge">0</span></button>
+      <button id="theme-toggle" class="icon-btn">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="page-accueil" class="page active">
+    <div class="hero">
+      <div class="container">
+        <span class="hero-badge">Livraison instantanée</span>
+        <h1>Rechargez vos jeux préférés<br><span class="accent">au meilleur prix</span></h1>
+        <p>Paiement en Ariary · Support 7j/7 · Livraison en 1–2 minutes</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="naviguer('catalogue')">Voir le catalogue</button>
+          <button class="btn btn-outline" onclick="naviguer('suivi')">Suivre une commande</button>
+        </div>
+      </div>
+    </div>
+    <div class="container section">
+      <div class="section-head"><h2>Jeux populaires</h2><span class="link-more" onclick="naviguer('catalogue')">Tout voir →</span></div>
+      <div id="popular-grid" class="grid"></div>
+    </div>
+    <div class="container section">
+      <h2>Pourquoi Nexytop ?</h2>
+      <div class="features">
+        <div class="feature"><div class="feature-icon">⚡</div><h3>Livraison rapide</h3><p>Votre recharge en 1 à 2 minutes.</p></div>
+        <div class="feature"><div class="feature-icon">💰</div><h3>Prix en Ariary</h3><p>Tarifs ajustés au taux du jour.</p></div>
+        <div class="feature"><div class="feature-icon">🔒</div><h3>Paiement sécurisé</h3><p>Vos données sont protégées.</p></div>
+        <div class="feature"><div class="feature-icon">🎧</div><h3>Support 7j/7</h3><p>Une équipe à votre écoute.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-catalogue" class="page">
+    <div class="container section">
+      <h1>Catalogue</h1>
+      <div class="filters">
+        <input type="search" id="search" placeholder="Rechercher un jeu...">
+        <select id="category-filter"><option value="all">Toutes les catégories</option></select>
+      </div>
+      <div id="catalogue-grid" class="grid"></div>
+    </div>
+  </section>
+
+  <section id="page-jeu" class="page">
+    <div class="container section">
+      <span class="back-link" onclick="naviguer('catalogue')">← Retour au catalogue</span>
+      <div class="game-header">
+        <div id="game-image"></div>
+        <h1 id="game-title">Chargement...</h1>
+      </div>
+      <div id="packs" class="packs-grid"></div>
+      <div class="order-box">
+        <h2>Commander</h2>
+        <form id="order-form">
+          <div id="dynamic-fields"></div>
+          <div class="form-group">
+            <label>Prix total</label>
+            <input type="text" id="total-price" readonly>
+          </div>
+          <button type="submit" class="btn btn-primary">Ajouter au panier</button>
+        </form>
+        <div id="order-message" class="alert" style="display:none;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-suivi" class="page">
+    <div class="container section">
+      <h1>Suivi de commande</h1>
+      <p>Entrez votre numéro de commande (ex. NX-2026-0001).</p>
+      <form id="track-form" class="form-group">
+        <input type="text" id="order-id" placeholder="NX-2026-0001" required>
+        <button type="submit" class="btn btn-primary" style="margin-top:12px;">Suivre</button>
+      </form>
+      <div id="track-result" class="alert" style="display:none;"></div>
+    </div>
+  </section>
+
+  <section id="page-contact" class="page">
+    <div class="container section">
+      <h1>Contact</h1>
+      <p>Une question ? Écrivez-nous.</p>
+      <form id="contact-form">
+        <div class="form-group"><label>Nom</label><input type="text" required></div>
+        <div class="form-group"><label>Email</label><input type="email" required></div>
+        <div class="form-group"><label>Message</label><input type="text" required></div>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+      </form>
+      <div id="contact-message" class="alert" style="display:none;"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container"><p>© 2026 Nexytop — Madagascar. Tous droits réservés.</p></div>
+</footer>
+
+<div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
+<aside id="cart-panel" class="cart-panel">
+  <div class="cart-header">
+    <h2>Mon panier</h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div id="cart-items" class="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total">Total : <span id="cart-total">0 Ar</span></div>
+    <button id="cart-checkout" class="btn btn-primary">Commander</button>
+  </div>
+</aside>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ===== SUPABASE ===== */
+const SUPABASE_URL = 'https://cjcuwccrqeqodwpxibhv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_6PUjD1K5U1TsBW6nza5c7w_nzK4bA1n';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ===== PRIX ===== */
+const USD_TO_MGA = 4580;
+const MARGIN = 0.185;
+const ROUND_TO = 100;
+
+/* ===== DATA ===== */
+const DATA = { "brands": [
+  { "slug":"pubg-mobile","name":"PUBG Mobile","category":"Top-ups","fields":["player_id","player_name","phone"],"products":[
+    {"name":"60 UC","usd":0.92},{"name":"325 UC","usd":4.63},{"name":"660 UC","usd":9.17},{"name":"1800 UC","usd":22.91},{"name":"3850 UC","usd":45.76},{"name":"8100 UC","usd":91.34},{"name":"16200 UC","usd":183.34},{"name":"Prime (1 mois)","usd":0.91},{"name":"Prime (12 mois)","usd":10.88},{"name":"Elite Pass Plus LV1-100","usd":26.81}]},
+  { "slug":"free-fire","name":"Free Fire","category":"Top-ups","fields":["player_id","player_name","phone"],"products":[
+    {"name":"110 Diamonds","usd":0.81},{"name":"572 Diamonds","usd":4.00},{"name":"1166 Diamonds","usd":7.97},{"name":"2398 Diamonds","usd":15.88},{"name":"6160 Diamonds","usd":40.13},{"name":"Weekly Lite","usd":0.39},{"name":"Monthly Membership","usd":5.76},{"name":"Newbie Bundle","usd":0.23}]},
+  { "slug":"delta-force","name":"Delta Force","category":"Top-ups","fields":["player_id","player_name","phone"],"products":[
+    {"name":"18 Delta Coins","usd":0.25},{"name":"60 Delta Coins","usd":0.81},{"name":"320 Delta Coins","usd":4.08},{"name":"750 Delta Coins","usd":8.15},{"name":"1980 Delta Coins","usd":20.37},{"name":"3950 Delta Coins","usd":40.74},{"name":"8100 Delta Coins","usd":81.46},{"name":"24300 Delta Coins","usd":247.15}]},
+  { "slug":"mobile-legends","name":"Mobile Legends","category":"Top-ups","fields":["player_id","player_name","phone"],"products":[
+    {"name":"50 + 5 Diamonds","usd":0.72},{"name":"150 + 15 Diamonds","usd":2.15},{"name":"257 Diamonds (234 + 23)","usd":3.20},{"name":"429 Diamonds","usd":5.47},{"name":"706 Diamonds (625 + 81)","usd":8.68},{"name":"1060 Diamonds","usd":13.39},{"name":"1928 Diamonds","usd":24.39},{"name":"3688 Diamonds (3099 + 589)","usd":43.83},{"name":"6944 Diamonds","usd":84.95},{"name":"9994 Diamonds","usd":120.59}]},
+  { "slug":"roblox","name":"Roblox","category":"Top-ups","fields":["roblox_username","phone"],"products":[
+    {"name":"50 Robux","usd":1.04},{"name":"200 Robux","usd":3.03},{"name":"800 Robux","usd":9.54},{"name":"2000 Robux","usd":23.24},{"name":"3000 Robux","usd":35.01},{"name":"10000 Robux","usd":103.35},{"name":"11000 Robux","usd":115.97}]},
+  { "slug":"minecraft","name":"Minecraft","category":"Top-ups","fields":["email","phone"],"products":[
+    {"name":"Java & Bedrock Edition","usd":17.81},{"name":"1720 Minecoins","usd":8.64},{"name":"8800 Minecoins","usd":52.09}]},
+  { "slug":"genshin-impact","name":"Genshin Impact","category":"Top-ups","fields":["uid","server","player_name","phone"],"products":[
+    {"name":"60 Genesis Crystals","usd":1.03},{"name":"330 Genesis Crystals","usd":5.14},{"name":"1090 Genesis Crystals","usd":15.39},{"name":"2240 Genesis Crystals","usd":30.77},{"name":"3880 Genesis Crystals","usd":51.28},{"name":"8080 Genesis Crystals","usd":102.54},{"name":"Blessing of the Welkin Moon","usd":5.14}]},
+  { "slug":"arena-breakout","name":"Arena Breakout","category":"Top-ups","fields":["player_id","player_name","phone"],"products":[
+    {"name":"66 Bonds","usd":0.83},{"name":"335 Bonds","usd":4.17},{"name":"675 Bonds","usd":8.35},{"name":"1690 Bonds","usd":20.85},{"name":"3400 Bonds","usd":41.75},{"name":"6820 Bonds","usd":83.36},{"name":"13640 Bonds","usd":166.72},{"name":"20460 Bonds","usd":250.08},{"name":"Beginner Select","usd":0.77}]},
+  { "slug":"honkai-star-rail","name":"Honkai: Star Rail","category":"Top-ups","fields":["uid","server","player_name","phone"],"products":[
+    {"name":"Express Supply Pass","usd":4.52},{"name":"60 Oneiric Shards","usd":0.92},{"name":"330 Oneiric Shards","usd":4.52},{"name":"1090 Oneiric Shards","usd":14.41},{"name":"2240 Oneiric Shards","usd":27.25},{"name":"3880 Oneiric Shards","usd":45.46},{"name":"8080 Oneiric Shards","usd":94.11}]},
+  { "slug":"blood-strike","name":"Blood Strike","category":"Top-ups","fields":["player_id","player_name","phone"],"products":[
+    {"name":"51 Gold","usd":0.42},{"name":"320 Gold","usd":2.31},{"name":"1100 Gold","usd":7.68},{"name":"2260 Gold","usd":15.25},{"name":"5800 Gold","usd":37.98}]},
+  { "slug":"eafc-mobile-my","name":"EAFC Mobile (MY)","category":"Top-ups","fields":["player_id","player_name","phone"],"products":[
+    {"name":"40 FC Points","usd":0.51},{"name":"100 FC Points","usd":1.23},{"name":"520 FC Points","usd":5.95},{"name":"1070 FC Points","usd":11.18},{"name":"2200 FC Points","usd":23.61},{"name":"5750 FC Points","usd":59.68},{"name":"12000 FC Points","usd":119.37}]},
+  { "slug":"steam","name":"Steam","category":"Top-ups","fields":["steam_login","amount_usd","phone"],"products":[
+    {"name":"Rechargement libre (1$ = 1$)","usd":1.00}]},
+  { "slug":"discord","name":"Discord","category":"Cartes cadeaux","fields":["discord_username","phone"],"products":[
+    {"name":"Nitro Basic — 1 mois","usd":4.60},{"name":"Nitro — 1 mois","usd":9.15},{"name":"Nitro — 1 an","usd":90.47}]},
+  { "slug":"magic-chess-go-go-ru","name":"Magic Chess: Go Go · Россия","category":"Top-ups","fields":["player_id","server","player_name","phone"],"products":[
+    {"name":"55 Diamonds","usd":1.01},{"name":"275 Diamonds","usd":5.04},{"name":"565 Diamonds","usd":10.13},{"name":"1765 Diamonds","usd":30.40},{"name":"6000 Diamonds","usd":101.33}]},
+  { "slug":"telegram-premium","name":"Telegram Premium","category":"Telegram","fields":["telegram_username","phone"],"products":[
+    {"name":"3 mois","usd":12.54},{"name":"6 mois","usd":16.72},{"name":"12 mois","usd":30.02}]},
+  { "slug":"telegram-stars","name":"Telegram Stars","category":"Telegram","fields":["telegram_username","phone"],"products":[
+    {"name":"Stars (quantité libre)","usd":0.015637}]},
+  { "slug":"blood-strike-mena","name":"Blood Strike (MENA)","category":"Top-ups","fields":["player_id","server","player_name","phone"],"products":[
+    {"name":"51 GOLD","usd":0.44},{"name":"320 GOLD","usd":2.68},{"name":"1100 GOLD","usd":8.95},{"name":"2260 GOLD","usd":17.88},{"name":"5800 GOLD","usd":44.70}]},
+  { "slug":"whiteout-survival","name":"Whiteout Survival","category":"Top-ups","fields":["player_id","player_name","phone"],"products":[
+    {"name":"99 Frost Stars","usd":1.10},{"name":"499 Frost Stars","usd":5.40},{"name":"999 Frost Stars","usd":11.08},{"name":"4999 Frost Stars","usd":54.42},{"name":"9999 Frost Stars","usd":110.42},{"name":"29999 Frost Stars","usd":324.83}]},
+  { "slug":"magic-chess-go-go","name":"Magic Chess: Go Go","category":"Top-ups","fields":["player_id","server","player_name","phone"],"products":[
+    {"name":"55 Diamonds","usd":0.74},{"name":"165 Diamonds","usd":2.22},{"name":"565 Diamonds","usd":7.39},{"name":"1060 Diamonds","usd":14.05},{"name":"2195 Diamonds","usd":27.60},{"name":"5532 Diamonds","usd":68.98},{"name":"9288 Diamonds","usd":114.97}]}
+]};
+
+/* ===== ICONES ===== */
+const GAME_ICONS = {
+  'pubg-mobile':{icon:'🔫',color:'#F2A900'},'free-fire':{icon:'🔥',color:'#FF6B00'},
+  'delta-force':{icon:'🎯',color:'#4CAF50'},'mobile-legends':{icon:'⚔️',color:'#2196F3'},
+  'roblox':{icon:'🧱',color:'#E2231A'},'minecraft':{icon:'⛏️',color:'#62B47A'},
+  'genshin-impact':{icon:'✨',color:'#9C27B0'},'arena-breakout':{icon:'💥',color:'#FF5722'},
+  'honkai-star-rail':{icon:'🚂',color:'#00BCD4'},'blood-strike':{icon:'🩸',color:'#D32F2F'},
+  'eafc-mobile-my':{icon:'⚽',color:'#1A73E8'},'steam':{icon:'🎮',color:'#171A21'},
+  'discord':{icon:'💬',color:'#5865F2'},'magic-chess-go-go-ru':{icon:'♟️',color:'#7C3AED'},
+  'telegram-premium':{icon:'✈️',color:'#229ED9'},'telegram-stars':{icon:'⭐',color:'#FDB913'},
+  'blood-strike-mena':{icon:'🩸',color:'#B71C1C'},'whiteout-survival':{icon:'❄️',color:'#0288D1'},
+  'magic-chess-go-go':{icon:'♟️',color:'#8B5CF6'}
+};
+
+/* ===== THEME ===== */
+(function initTheme(){
+  const btn=document.getElementById('theme-toggle');
+  const saved=localStorage.getItem('nexytop-theme')||'light';
+  document.documentElement.setAttribute('data-theme',saved);
+  btn.textContent=saved==='dark'?'☀️':'🌙';
+  btn.onclick=()=>{
+    const next=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',next);
+    localStorage.setItem('nexytop-theme',next);
+    btn.textContent=next==='dark'?'☀️':'🌙';
+  };
+})();
+
+/* ===== PRIX ===== */
+function prixEnAr(usd){return Math.ceil(usd*USD_TO_MGA*(1+MARGIN)/ROUND_TO)*ROUND_TO;}
+function formatAr(n){return n.toLocaleString('fr-FR')+' Ar';}
+
+/* ===== IMG ===== */
+function imgHTML(brand,small=false){
+  const meta=GAME_ICONS[brand.slug]||{icon:'🎮',color:'#7C3AED'};
+  const initials=brand.name.replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase();
+  const cls=small?'game-img-wrap small':'game-img-wrap';
+  return `<div class="${cls}" style="--game-color:${meta.color};"><span class="game-emoji">${meta.icon}</span><span class="game-initials">${initials}</span></div>`;
+}
+
+/* ===== PANIER ===== */
+let CART=[];
+try{CART=JSON.parse(localStorage.getItem('nexytop-cart')||'[]');}catch{CART=[];}
+function saveCart(){localStorage.setItem('nexytop-cart',JSON.stringify(CART));}
+function updateCartBadge(){const b=document.getElementById('cart-count');if(b)b.textContent=CART.reduce((s,i)=>s+i.qty,0);}
+function renderCart(){
+  const itemsEl=document.getElementById('cart-items'),totalEl=document.getElementById('cart-total');
+  if(!CART.length){itemsEl.innerHTML='<p style="color:var(--text-muted);text-align:center;padding:40px 0;">Votre panier est vide.</p>';totalEl.textContent='0 Ar';updateCartBadge();return;}
+  itemsEl.innerHTML=CART.map((item,i)=>`
+    <div class="cart-item">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.pack} <span style="color:var(--text-muted)">×${item.qty}</span></div>
+        <div class="cart-item-game">${item.game}</div>
+        <div class="cart-item-price">${formatAr(item.priceAr*item.qty)}</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${i})">🗑️</button>
+    </div>`).join('');
+  totalEl.textContent=formatAr(CART.reduce((s,i)=>s+i.priceAr*i.qty,0));
+  updateCartBadge();
+}
+function addToCart(game,pack,priceAr,fields){
+  const ex=CART.find(i=>i.game===game&&i.pack===pack&&JSON.stringify(i.fields)===JSON.stringify(fields));
+  if(ex)ex.qty++;else CART.push({game,pack,priceAr,qty:1,fields:fields||{}});
+  saveCart();renderCart();openCart();
+}
+function removeFromCart(i){CART.splice(i,1);saveCart();renderCart();}
+function openCart(){document.getElementById('cart-panel').classList.add('open');document.getElementById('cart-overlay').classList.add('open');}
+function closeCart(){document.getElementById('cart-panel').classList.remove('open');document.getElementById('cart-overlay').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCart();});
+
+/* ===== COMMANDE SUPABASE ===== */
+document.getElementById('cart-checkout').onclick=async()=>{
+  if(!CART.length){alert('Votre panier est vide.');return;}
+  const btn=document.getElementById('cart-checkout');
+  btn.disabled=true;btn.textContent='Envoi...';
+  try{
+    for(const item of CART){
+      const {error}=await supabaseClient.from('commandes').insert({
+        jeu:item.game,
+        pack:item.pack,
+        prix_ar:item.priceAr*item.qty,
+        player_id:item.fields.player_id||item.fields.uid||item.fields.roblox_username||item.fields.telegram_username||item.fields.steam_login||item.fields.email||'',
+        nom_joueur:item.fields.player_name||item.fields.discord_username||'',
+        telephone:item.fields.phone||''
+      });
+      if(error)throw error;
+    }
+    alert('✅ Commande enregistrée ! Nous vous contacterons bientôt.');
+    CART=[];saveCart();renderCart();closeCart();
+  }catch(err){
+    console.error(err);
+    alert('Erreur : '+(err.message||'réessayez.'));
+  }finally{
+    btn.disabled=false;btn.textContent='Commander';
+  }
+};
+
+/* ===== NAVIGATION ===== */
+function naviguer(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById('page-'+page);if(el)el.classList.add('active');
+  document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ===== ACCUEIL ===== */
+function initAccueil(){
+  const grid=document.getElementById('popular-grid');
+  grid.innerHTML=DATA.brands.slice(0,8).map(b=>`
+    <div class="card" onclick="ouvrirJeu('${b.slug}')">
+      ${imgHTML(b)}
+      <h3>${b.name}</h3>
+      <div class="price">dès ${formatAr(prixEnAr(Math.min(...b.products.map(p=>p.usd))))}</div>
+    </div>`).join('');
+}
+
+/* ===== CATALOGUE ===== */
+function initCatalogue(){
+  const grid=document.getElementById('catalogue-grid');
+  const search=document.getElementById('search');
+  const catFilter=document.getElementById('category-filter');
+  [...new Set(DATA.brands.map(b=>b.category))].forEach(c=>{
+    const o=document.createElement('option');o.value=c;o.textContent=c;catFilter.appendChild(o);
+  });
+  function render(){
+    const q=search.value.toLowerCase(),cat=catFilter.value;
+    const f=DATA.brands.filter(b=>(cat==='all'||b.category===cat)&&b.name.toLowerCase().includes(q));
+    grid.innerHTML=f.map(b=>`
+      <div class="card" onclick="ouvrirJeu('${b.slug}')">
+        ${imgHTML(b)}
+        <h3>${b.name}</h3>
+        <div class="price">dès ${formatAr(prixEnAr(Math.min(...b.products.map(p=>p.usd))))}</div>
+      </div>`).join('')||'<p>Aucun jeu trouvé.</p>';
+  }
+  search.addEventListener('input',render);
+  catFilter.addEventListener('change',render);
+  render();
+}
+
+/* ===== JEU ===== */
+let selectedPack=null,currentBrand=null;
+function ouvrirJeu(slug){
+  naviguer('jeu');
+  const brand=DATA.brands.find(b=>b.slug===slug);
+  if(!brand)return;
+  currentBrand=brand;selectedPack=null;
+  document.getElementById('game-title').textContent=brand.name;
+  document.getElementById('game-image').innerHTML=imgHTML(brand,true);
+  const labels={player_id:'Player ID',player_name:'Nom du joueur',phone:'Téléphone',uid:'UID',server:'Serveur',roblox_username:'Pseudo Roblox',steam_login:'Login Steam',amount_usd:'Montant (USD)',discord_username:'Pseudo Discord',telegram_username:'@username',email:'Email'};
+  document.getElementById('dynamic-fields').innerHTML=brand.fields.map(f=>`<div class="form-group"><label>${labels[f]||f}</label><input type="text" name="${f}" required></div>`).join('');
+  document.getElementById('packs').innerHTML=brand.products.map((p,i)=>`
+    <div class="pack" data-index="${i}" onclick="selectPack(${i})">
+      <div class="pack-name">${p.name}</div>
+      <div class="pack-price">${formatAr(prixEnAr(p.usd))}</div>
+    </div>`).join('');
+  document.getElementById('total-price').value='';
+  document.getElementById('order-message').style.display='none';
+}
+function selectPack(i){
+  document.querySelectorAll('#packs .pack').forEach(x=>x.classList.remove('selected'));
+  const el=document.querySelector(`#packs .pack[data-index="${i}"]`);
+  el.classList.add('selected');
+  selectedPack=currentBrand.products[i];
+  document.getElementById('total-price').value=formatAr(prixEnAr(selectedPack.usd));
+}
+document.getElementById('order-form').onsubmit=(e)=>{
+  e.preventDefault();
+  const msg=document.getElementById('order-message');
+  if(!selectedPack){msg.className='alert error';msg.textContent='Sélectionnez un pack.';msg.style.display='block';return;}
+  const fields={};
+  for(const inp of document.querySelectorAll('#dynamic-fields input')){
+    if(!inp.value.trim()){msg.className='alert error';msg.textContent=`Remplissez « ${inp.previousElementSibling.textContent} ».`;msg.style.display='block';return;}
+    fields[inp.name]=inp.value.trim();
+  }
+  addToCart(currentBrand.name,selectedPack.name,prixEnAr(selectedPack.usd),fields);
+  msg.className='alert success';msg.textContent=`« ${selectedPack.name} » ajouté au panier.`;msg.style.display='block';
+  document.querySelectorAll('#dynamic-fields input').forEach(i=>i.value='');
+  document.querySelectorAll('#packs .pack').forEach(x=>x.classList.remove('selected'));
+  selectedPack=null;document.getElementById('total-price').value='';
+};
+
+/* ===== SUIVI ===== */
+document.getElementById('track-form').onsubmit=async(e)=>{
+  e.preventDefault();
+  const res=document.getElementById('track-result');
+  const id=document.getElementById('order-id').value.trim();
+  try{
+    const {data,error}=await supabaseClient.from('commandes').select('*').eq('id',id).limit(1);
+    if(error)throw error;
+    if(data&&data.length){
+      res.className='alert success';
+      res.textContent=`Commande ${id} : ${data[0].statut} — ${formatAr(data[0].prix_ar)}`;
+    }else{
+      res.className='alert error';
+      res.textContent='Commande introuvable.';
+    }
+  }catch{
+    res.className='alert error';
+    res.textContent='Erreur de connexion.';
+  }
+  res.style.display='block';
+};
+
+/* ===== CONTACT ===== */
+document.getElementById('contact-form').onsubmit=(e)=>{
+  e.preventDefault();
+  const msg=document.getElementById('contact-message');
+  msg.className='alert success';msg.textContent='Message envoyé ! (démo)';msg.style.display='block';
+  e.target.reset();
+};
+
+/* ===== INIT ===== */
+initAccueil();
+initCatalogue();
+renderCart();
+</script>
+</body>
+</html>
