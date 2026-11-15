@@ -6,7 +6,7 @@
 <title>Nexytop</title>
 <style>
 :root {
-  --violet: #7C3AED; --violet2: #A78BFA; --pink: #EC4899;
+  --violet: #7C3AED; --violet2: #A78BFA; --violet3: #4C1D95;
   --bg: #faf9ff; --bg2: rgba(255,255,255,.7); --bg3: rgba(255,255,255,.4);
   --text: #111; --muted: #666; --border: rgba(124,58,237,.15);
   --glass: rgba(255,255,255,.55);
@@ -14,7 +14,7 @@
   --shadow-lg: 0 30px 80px rgba(0,0,0,.3);
 }
 [data-theme="dark"] {
-  --violet: #8B5CF6; --violet2: #A78BFA; --pink: #F472B6;
+  --violet: #8B5CF6; --violet2: #A78BFA; --violet3: #5B21B6;
   --bg: #0a0910; --bg2: rgba(26,24,32,.7); --bg3: rgba(26,24,32,.4);
   --text: #f5f4fa; --muted: #999; --border: rgba(139,92,246,.2);
   --glass: rgba(26,24,32,.55);
@@ -32,16 +32,16 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== FOND ANIMÉ : halos violets flottants ===== */
+/* ===== FOND ANIMÉ : halos violets ===== */
 body::before {
   content: '';
   position: fixed;
   inset: -20%;
   background:
-    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--violet) 25%, transparent), transparent 40%),
-    radial-gradient(circle at 80% 30%, color-mix(in srgb, var(--pink) 20%, transparent), transparent 40%),
-    radial-gradient(circle at 50% 80%, color-mix(in srgb, var(--violet2) 25%, transparent), transparent 45%),
-    radial-gradient(circle at 90% 90%, color-mix(in srgb, var(--violet) 20%, transparent), transparent 40%);
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--violet) 28%, transparent), transparent 40%),
+    radial-gradient(circle at 80% 30%, color-mix(in srgb, var(--violet2) 22%, transparent), transparent 40%),
+    radial-gradient(circle at 50% 80%, color-mix(in srgb, var(--violet3) 25%, transparent), transparent 45%),
+    radial-gradient(circle at 90% 90%, color-mix(in srgb, var(--violet) 22%, transparent), transparent 40%);
   z-index: -2;
   pointer-events: none;
   animation: float 20s ease-in-out infinite;
@@ -80,7 +80,7 @@ header {
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
 .logo {
   font-size: 1.7rem; font-weight: 900; cursor: pointer; letter-spacing: -1.5px;
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--violet), var(--violet3));
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -92,7 +92,7 @@ nav a {
 nav a.active, nav a:hover { color: var(--violet); }
 nav a.active::after {
   content:''; position:absolute; bottom:-24px; left:0; right:0;
-  height:3px; background: linear-gradient(90deg, var(--violet), var(--pink));
+  height:3px; background: linear-gradient(90deg, var(--violet), var(--violet2));
   border-radius:3px;
 }
 .actions { display: flex; gap: 10px; }
@@ -106,7 +106,7 @@ nav a.active::after {
 .btn-icon:hover { border-color: var(--violet); transform: translateY(-2px); box-shadow: var(--shadow); }
 .badge {
   position: absolute; top: -6px; right: -6px;
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--violet), var(--violet3));
   color: #fff; border-radius: 50%;
   font-size: .6rem; font-weight: 800;
   width: 20px; height: 20px;
@@ -121,7 +121,7 @@ nav a.active::after {
   margin-bottom: 18px; line-height: 1.05; letter-spacing: -2px;
 }
 .hero h1 span {
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--violet), var(--violet3));
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -146,7 +146,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
 }
 .game-card::before {
   content:''; position:absolute; inset:0;
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--violet), var(--violet3));
   opacity:0; transition: opacity .35s; z-index:0;
 }
 .game-card::after {
@@ -168,7 +168,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
 .game-img {
   width: 84px; height: 84px; margin: 0 auto 14px;
   border-radius: 20px; overflow: hidden;
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--violet), var(--violet3));
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 8px 24px color-mix(in srgb, var(--violet) 35%, transparent);
   transition: transform .35s;
@@ -179,7 +179,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
 
 .game-card h3 { font-size: .98rem; margin-bottom: 6px; font-weight: 700; }
 .game-card .price {
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--violet), var(--violet3));
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 800; font-size: .9rem;
@@ -206,13 +206,13 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
 }
 .pack-name img { width: 20px; height: 20px; object-fit: contain; }
 .pack-price {
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--violet), var(--violet3));
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 800; margin-top: 8px; font-size: 1.05rem;
 }
 
-/* ===== PANIER GLASSMORPHISM ===== */
+/* ===== PANIER GLASSMORPHISM VIOLET ===== */
 .overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.4);
@@ -238,8 +238,8 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
 .cart::before {
   content:''; position: absolute; inset: 0;
   background:
-    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--violet) 15%, transparent), transparent 40%),
-    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--pink) 15%, transparent), transparent 40%);
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--violet) 18%, transparent), transparent 40%),
+    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--violet3) 18%, transparent), transparent 40%);
   pointer-events: none;
 }
 .cart.open { opacity: 1; pointer-events: auto; transform: translate(-50%,-50%) scale(1); }
@@ -273,7 +273,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
 .cart-info .game-img { width: 60px; height: 60px; margin: 0; border-radius: 14px; }
 .cart-info strong { display: block; font-size: 1.05rem; font-weight: 800; }
 .cart-info .pack-label {
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--violet), var(--violet3));
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 800; font-size: 1rem; margin-top: 3px;
@@ -286,7 +286,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
 }
 .cart-total { font-weight: 800; font-size: 1.25rem; display: flex; justify-content: space-between; margin-bottom: 16px; }
 .cart-total span {
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--violet), var(--violet3));
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -309,7 +309,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
 .btn {
   display: block; width: 100%; padding: 16px;
   border-radius: 16px; border: none;
-  background: linear-gradient(135deg, var(--violet), var(--pink));
+  background: linear-gradient(135deg, var(--violet), var(--violet3));
   color: #fff; font-weight: 800; font-size: 1rem;
   cursor: pointer; transition: .3s;
   box-shadow: 0 8px 28px color-mix(in srgb, var(--violet) 40%, transparent);
@@ -317,7 +317,7 @@ h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1p
 }
 .btn::before {
   content:''; position:absolute; inset:0;
-  background: linear-gradient(135deg, var(--pink), var(--violet));
+  background: linear-gradient(135deg, var(--violet3), var(--violet));
   opacity:0; transition: opacity .3s;
 }
 .btn:hover::before { opacity: 1; }
