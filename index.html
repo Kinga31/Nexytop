@@ -1,440 +1,478 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html lang="fr" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexytop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#07060f">
+<title>Nexytop – Recharges de jeux à Madagascar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --violet: #7C3AED; --violet2: #A78BFA; --violet3: #4C1D95;
-  --bg: #faf9ff; --bg2: rgba(255,255,255,.7); --bg3: rgba(255,255,255,.4);
-  --text: #111; --muted: #666; --border: rgba(124,58,237,.15);
-  --glass: rgba(255,255,255,.55);
-  --shadow: 0 8px 32px rgba(124,58,237,.15);
-  --shadow-lg: 0 30px 80px rgba(0,0,0,.3);
+  --ac: #8B5CF6; --ac2: #22D3EE;
+  --bg: #f5f3ff; --bg-elev: #ffffff; --surface: rgba(255,255,255,.82); --surface-2: rgba(124,58,237,.06);
+  --text: #15122b; --muted: #6a6688; --line: rgba(76,29,149,.13);
+  --glass: rgba(255,255,255,.8);
+  --shadow: 0 14px 44px rgba(76,29,149,.14);
+  --orb-a: rgba(139,92,246,.28); --orb-b: rgba(34,211,238,.20); --orb-c: rgba(244,114,182,.16);
+  --grid: rgba(76,29,149,.07);
+  --font-d: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --brand: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+  --brand-text: linear-gradient(120deg, #A78BFA, #22D3EE);
 }
 [data-theme="dark"] {
-  --violet: #8B5CF6; --violet2: #A78BFA; --violet3: #5B21B6;
-  --bg: #0a0910; --bg2: rgba(26,24,32,.7); --bg3: rgba(26,24,32,.4);
-  --text: #f5f4fa; --muted: #999; --border: rgba(139,92,246,.2);
-  --glass: rgba(26,24,32,.55);
-  --shadow: 0 8px 32px rgba(0,0,0,.4);
-  --shadow-lg: 0 30px 80px rgba(0,0,0,.7);
+  --bg: #07060f; --bg-elev: #100e1f; --surface: rgba(22,19,42,.72); --surface-2: rgba(167,139,250,.07);
+  --text: #f4f2ff; --muted: #9b97ba; --line: rgba(167,139,250,.15);
+  --glass: rgba(10,9,20,.78);
+  --shadow: 0 18px 54px rgba(0,0,0,.55);
+  --orb-a: rgba(124,58,237,.42); --orb-b: rgba(34,211,238,.15); --orb-c: rgba(236,72,153,.13);
+  --grid: rgba(167,139,250,.055);
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  position: relative;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; line-height: 1.5; }
+button, input, select { font-family: inherit; }
+img { max-width: 100%; }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: -20%;
-  background:
-    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--violet) 28%, transparent), transparent 40%),
-    radial-gradient(circle at 80% 30%, color-mix(in srgb, var(--violet2) 22%, transparent), transparent 40%),
-    radial-gradient(circle at 50% 80%, color-mix(in srgb, var(--violet3) 25%, transparent), transparent 45%),
-    radial-gradient(circle at 90% 90%, color-mix(in srgb, var(--violet) 22%, transparent), transparent 40%);
-  z-index: -2;
-  pointer-events: none;
-  animation: float 20s ease-in-out infinite;
-  filter: blur(40px);
-}
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(3%, -3%) scale(1.05); }
-  66% { transform: translate(-3%, 3%) scale(.98); }
-}
+/* ===== FOND ===== */
+.bg { position: fixed; inset: 0; z-index: -3; overflow: hidden; pointer-events: none; }
+.orb { position: absolute; border-radius: 50%; filter: blur(100px); }
+.orb.a { width: 700px; height: 700px; background: var(--orb-a); top: -260px; left: -200px; animation: dr1 26s ease-in-out infinite; }
+.orb.b { width: 560px; height: 560px; background: var(--orb-b); top: 30%; right: -200px; animation: dr2 30s ease-in-out infinite; }
+.orb.c { width: 620px; height: 620px; background: var(--orb-c); bottom: -280px; left: 20%; animation: dr3 34s ease-in-out infinite; }
+@keyframes dr1 { 50% { transform: translate(140px, 100px) scale(1.12); } }
+@keyframes dr2 { 50% { transform: translate(-120px, 80px) scale(.9); } }
+@keyframes dr3 { 50% { transform: translate(100px, -110px) scale(1.1); } }
+.bg-grid { position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 52px 52px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 10%, transparent 75%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 10%, transparent 75%); }
+.bg-noise { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .04;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
 
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(color-mix(in srgb, var(--violet) 4%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--violet) 4%, transparent) 1px, transparent 1px);
-  background-size: 60px 60px;
-  z-index: -1;
-  pointer-events: none;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-}
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 22px; }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+/* ===== HEADER ===== */
+header { position: sticky; top: 0; z-index: 60; background: var(--glass); border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(22px) saturate(180%); -webkit-backdrop-filter: blur(22px) saturate(180%); }
+.hd { display: flex; align-items: center; gap: 18px; height: 70px; }
+.logo { display: flex; align-items: center; gap: 10px; cursor: pointer; font-family: var(--font-d); font-weight: 700; font-size: 1.4rem; letter-spacing: -.5px; }
+.logo-mark { width: 38px; height: 38px; border-radius: 12px; background: var(--brand); display: grid; place-items: center; color: #fff; font-size: 1.15rem; box-shadow: 0 6px 20px rgba(139,92,246,.55), inset 0 1px 0 rgba(255,255,255,.35); }
+.logo b { background: var(--brand-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
+nav.top { display: flex; gap: 4px; margin-left: 20px; }
+nav.top a { color: var(--muted); font-weight: 600; font-size: .92rem; padding: 9px 16px; border-radius: 11px; cursor: pointer; transition: .2s; user-select: none; }
+nav.top a:hover { color: var(--text); background: var(--surface-2); }
+nav.top a.active { color: var(--text); background: var(--surface-2); box-shadow: inset 0 -2px 0 var(--ac); }
+.sp { flex: 1; }
+.hsearch { position: relative; width: 260px; }
+.hsearch input { width: 100%; padding: 11px 14px 11px 40px; border-radius: 13px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-size: .9rem; transition: .2s; }
+.hsearch input:focus { outline: none; border-color: var(--ac); box-shadow: 0 0 0 4px color-mix(in srgb, var(--ac) 20%, transparent); }
+.hsearch::before { content: '⌕'; position: absolute; left: 14px; top: 50%; transform: translateY(-52%); font-size: 1.2rem; color: var(--muted); }
+.icon-btn { height: 44px; min-width: 44px; padding: 0 14px; border-radius: 13px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; font-size: 1.05rem; transition: .2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; position: relative; font-weight: 700; }
+.icon-btn:hover { border-color: var(--ac); transform: translateY(-1px); }
+.cart-btn { background: var(--brand); color: #fff; border-color: transparent; box-shadow: 0 8px 24px rgba(139,92,246,.45); }
+.cart-btn:hover { border-color: transparent; box-shadow: 0 12px 32px rgba(139,92,246,.6); }
+.cart-btn small { font-size: .82rem; font-weight: 700; opacity: .95; }
+.badge { position: absolute; top: -7px; right: -7px; min-width: 21px; height: 21px; padding: 0 5px; border-radius: 11px; background: #f43f5e; color: #fff; font-size: .68rem; font-weight: 800; display: none; align-items: center; justify-content: center; box-shadow: 0 3px 10px rgba(244,63,94,.55); }
+.badge.show { display: flex; }
+.badge.bump { animation: bump .4s; }
+@keyframes bump { 40% { transform: scale(1.55); } }
 
-header {
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0;
-  background: var(--glass);
-  z-index: 50;
-  backdrop-filter: blur(24px) saturate(180%);
-}
-.header-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
-.logo {
-  font-size: 1.7rem; font-weight: 900; cursor: pointer; letter-spacing: -1.5px;
-  background: linear-gradient(135deg, var(--violet), var(--violet3));
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-nav { display: flex; gap: 32px; }
-nav a {
-  color: var(--muted); text-decoration: none; cursor: pointer;
-  font-weight: 600; font-size: .92rem; transition: color .2s; position: relative;
-}
-nav a.active, nav a:hover { color: var(--violet); }
-nav a.active::after {
-  content:''; position:absolute; bottom:-24px; left:0; right:0;
-  height:3px; background: linear-gradient(90deg, var(--violet), var(--violet2));
-  border-radius:3px;
-}
-.actions { display: flex; gap: 10px; }
-.btn-icon {
-  width: 44px; height: 44px; border-radius: 14px;
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  cursor: pointer; font-size: 1.1rem; position: relative;
-  transition: .25s; backdrop-filter: blur(20px);
-}
-.btn-icon:hover { border-color: var(--violet); transform: translateY(-2px); box-shadow: var(--shadow); }
-.badge {
-  position: absolute; top: -6px; right: -6px;
-  background: linear-gradient(135deg, var(--violet), var(--violet3));
-  color: #fff; border-radius: 50%;
-  font-size: .6rem; font-weight: 800;
-  width: 20px; height: 20px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 10px color-mix(in srgb, var(--violet) 60%, transparent);
-}
+/* ===== PAGES ===== */
+.page { display: none; padding: 34px 0 80px; }
+.page.active { display: block; animation: rise .5s cubic-bezier(.2,.8,.2,1); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
-.hero { padding: 90px 0 70px; text-align: center; }
-.hero h1 {
-  font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 900;
-  margin-bottom: 18px; line-height: 1.05; letter-spacing: -2px;
-}
-.hero h1 span {
-  background: linear-gradient(135deg, var(--violet), var(--violet3));
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.hero p { color: var(--muted); font-size: 1.15rem; max-width: 520px; margin: 0 auto; }
+/* ===== HERO ===== */
+.hero { display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; padding: 46px 0 36px; }
+.pill { display: inline-flex; align-items: center; gap: 9px; padding: 8px 15px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: .8rem; font-weight: 700; color: var(--muted); margin-bottom: 24px; }
+.pill i { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.6); animation: ping 2s infinite; }
+@keyframes ping { 70% { box-shadow: 0 0 0 9px rgba(34,197,94,0); } 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); } }
+.hero h1 { font-family: var(--font-d); font-size: clamp(2.5rem, 5.6vw, 4.6rem); font-weight: 700; line-height: 1.02; letter-spacing: -2.5px; margin-bottom: 20px; }
+.hero h1 em { font-style: normal; background: var(--brand-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p.lead { color: var(--muted); font-size: 1.1rem; max-width: 500px; margin-bottom: 30px; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 15px 26px; border-radius: 15px; border: none; background: var(--brand); color: #fff; font-weight: 700; font-size: .98rem; cursor: pointer; transition: .25s; box-shadow: 0 10px 30px rgba(139,92,246,.45); position: relative; overflow: hidden; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(139,92,246,.6); }
+.btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.btn.block { width: 100%; }
+.btn.ghost { background: var(--surface); color: var(--text); border: 1px solid var(--line); box-shadow: none; }
+.btn.ghost:hover { border-color: var(--ac); box-shadow: none; }
+.btn.acc { background: linear-gradient(135deg, var(--ac), color-mix(in srgb, var(--ac) 55%, #000)); box-shadow: 0 10px 30px color-mix(in srgb, var(--ac) 45%, transparent); }
+.hero-stats { display: flex; gap: 32px; margin-top: 38px; flex-wrap: wrap; }
+.hero-stats b { display: block; font-family: var(--font-d); font-size: 1.7rem; letter-spacing: -1px; }
+.hero-stats span { color: var(--muted); font-size: .82rem; font-weight: 600; }
 
-.page { display: none; padding: 50px 0; }
-.page.active { display: block; animation: fadeIn .4s ease; }
-@keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
-h1 { font-size: 2rem; margin-bottom: 28px; font-weight: 800; letter-spacing: -1px; }
+.stack { position: relative; height: 420px; }
+.float-card { position: absolute; width: 270px; padding: 18px; border-radius: 24px; background: var(--surface); border: 1px solid var(--line); backdrop-filter: blur(22px); box-shadow: var(--shadow); display: flex; align-items: center; gap: 14px; cursor: pointer; transition: .3s; }
+.float-card:hover { border-color: var(--ac); }
+.float-card strong { display: block; font-family: var(--font-d); font-size: 1.05rem; }
+.float-card span { color: var(--muted); font-size: .82rem; font-weight: 600; }
+.float-card em { font-style: normal; display: block; margin-top: 3px; font-weight: 800; color: var(--ac2); font-size: .9rem; }
+.fc1 { top: 0; left: 10%; animation: fl 7s ease-in-out infinite; }
+.fc2 { top: 140px; right: 0; animation: fl 8s ease-in-out -2s infinite; }
+.fc3 { top: 280px; left: 0; animation: fl 9s ease-in-out -4s infinite; }
+@keyframes fl { 50% { transform: translateY(-16px); } }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-.game-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 24px 18px; text-align: center; cursor: pointer;
-  transition: all .35s cubic-bezier(.4,0,.2,1);
-  position: relative; overflow: hidden;
-  backdrop-filter: blur(20px) saturate(150%);
-}
-.game-card::before {
-  content:''; position:absolute; inset:0;
-  background: linear-gradient(135deg, var(--violet), var(--violet3));
-  opacity:0; transition: opacity .35s; z-index:0;
-}
-.game-card:hover {
-  border-color: color-mix(in srgb, var(--violet) 60%, transparent);
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 50px color-mix(in srgb, var(--violet) 30%, transparent);
-}
-.game-card:hover::before { opacity: .08; }
-.game-card > * { position: relative; z-index: 1; }
+/* ===== TILE (icône de jeu) ===== */
+.tile { position: relative; width: 64px; height: 64px; flex-shrink: 0; border-radius: 18px; overflow: hidden; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--c1, #8B5CF6), var(--c2, #5B21B6)); box-shadow: 0 8px 22px color-mix(in srgb, var(--c1, #8B5CF6) 45%, transparent), inset 0 1px 0 rgba(255,255,255,.3); }
+.tile .emoji { font-size: 1.9rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,.3)); }
+.tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tile.lg { width: 96px; height: 96px; border-radius: 26px; } .tile.lg .emoji { font-size: 2.8rem; }
+.tile.xl { width: 116px; height: 116px; border-radius: 30px; } .tile.xl .emoji { font-size: 3.2rem; }
+.tile.sm { width: 54px; height: 54px; border-radius: 15px; } .tile.sm .emoji { font-size: 1.6rem; }
 
-.game-img {
-  width: 84px; height: 84px; margin: 0 auto 14px;
-  border-radius: 20px; overflow: hidden;
-  background: linear-gradient(135deg, var(--violet), var(--violet3));
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--violet) 35%, transparent);
-  transition: transform .35s;
-}
-.game-card:hover .game-img { transform: rotate(-5deg) scale(1.08); }
-.game-img img { width:100%; height:100%; object-fit: cover; display:block; }
-.game-img .emoji { font-size: 2.4rem; }
+/* ===== TICKER ===== */
+.ticker { overflow: hidden; border-block: 1px solid var(--line); background: var(--surface-2); margin: 24px 0 56px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.ticker-track { display: flex; gap: 46px; width: max-content; padding: 16px 0; animation: tick 40s linear infinite; }
+.ticker:hover .ticker-track { animation-play-state: paused; }
+.ticker-track span { font-family: var(--font-d); font-weight: 600; font-size: 1.05rem; color: var(--muted); white-space: nowrap; display: inline-flex; gap: 10px; align-items: center; }
+@keyframes tick { to { transform: translateX(-50%); } }
 
-.game-card h3 { font-size: .98rem; margin-bottom: 6px; font-weight: 700; }
-.game-card .price {
-  background: linear-gradient(135deg, var(--violet), var(--violet3));
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 800; font-size: .9rem;
-}
+/* ===== SECTIONS ===== */
+.sec-head { display: flex; align-items: end; justify-content: space-between; margin-bottom: 24px; gap: 12px; }
+.sec-head h2, h1.title { font-family: var(--font-d); font-size: 2rem; letter-spacing: -1px; line-height: 1.1; }
+.sec-head p { color: var(--muted); font-size: .95rem; margin-top: 6px; }
+.link { color: var(--ac2); font-weight: 700; cursor: pointer; font-size: .92rem; white-space: nowrap; }
+.link:hover { text-decoration: underline; }
 
-/* ===== PACKS avec icône monnaie 36px ===== */
-.packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-top: 28px; }
-.pack {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 22px 16px; text-align: center; cursor: pointer;
-  transition: all .3s; backdrop-filter: blur(20px);
-  position: relative; overflow: hidden;
-}
-.pack:hover {
-  border-color: var(--violet);
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px color-mix(in srgb, var(--violet) 25%, transparent);
-}
-.pack-name {
-  font-weight: 700; font-size: 1rem;
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  line-height: 1.3;
-}
-.pack-name img {
-  width: 36px; height: 36px;
-  object-fit: contain;
-  flex-shrink: 0;
-  display: block;
-}
-.pack-price {
-  background: linear-gradient(135deg, var(--violet), var(--violet3));
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 800; margin-top: 10px; font-size: 1.1rem;
-}
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
+.card { position: relative; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: 26px; padding: 22px; cursor: pointer; transition: .35s cubic-bezier(.2,.8,.2,1); backdrop-filter: blur(18px); display: flex; flex-direction: column; gap: 16px; }
+.card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--c1) 38%, transparent), transparent 62%); opacity: .4; transition: .35s; pointer-events: none; }
+.card::after { content: ''; position: absolute; top: 0; left: -70%; width: 40%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.16), transparent); transform: skewX(-20deg); transition: left .8s; pointer-events: none; }
+.card:hover { transform: translateY(-8px); border-color: color-mix(in srgb, var(--c1) 70%, transparent); box-shadow: 0 26px 60px color-mix(in srgb, var(--c1) 32%, transparent); }
+.card:hover::before { opacity: 1; } .card:hover::after { left: 130%; }
+.card > * { position: relative; z-index: 1; }
+.card h3 { font-family: var(--font-d); font-size: 1.1rem; letter-spacing: -.3px; }
+.card .meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+.card .from { font-size: .72rem; color: var(--muted); font-weight: 600; display: block; }
+.card .p { font-weight: 800; font-size: .98rem; }
+.go { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; background: color-mix(in srgb, var(--c1) 30%, transparent); font-weight: 800; transition: .3s; }
+.card:hover .go { background: var(--c1); color: #fff; transform: translateX(3px); }
+.tag { position: absolute !important; top: 14px; right: 14px; font-size: .62rem; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; padding: 4px 9px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--line); color: var(--muted); }
 
-/* ===== PANIER ===== */
-.overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.4);
-  backdrop-filter: blur(12px);
-  z-index: 100; opacity: 0; pointer-events: none; transition: .3s;
-}
+.chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 26px; }
+.chip { padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font-weight: 700; font-size: .88rem; cursor: pointer; transition: .2s; }
+.chip:hover { color: var(--text); border-color: var(--ac); }
+.chip.on { background: var(--brand); color: #fff; border-color: transparent; box-shadow: 0 6px 20px rgba(139,92,246,.4); }
+
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 70px; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 26px; backdrop-filter: blur(18px); position: relative; overflow: hidden; }
+.step .n { font-family: var(--font-d); font-size: 3.4rem; font-weight: 700; line-height: 1; background: var(--brand-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; opacity: .9; }
+.step h4 { font-family: var(--font-d); font-size: 1.15rem; margin: 10px 0 6px; }
+.step p { color: var(--muted); font-size: .9rem; }
+
+.faq { margin-top: 70px; max-width: 820px; }
+.faq h2 { font-family: var(--font-d); font-size: 1.8rem; letter-spacing: -1px; margin-bottom: 20px; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px 22px; margin-bottom: 10px; backdrop-filter: blur(18px); transition: .2s; }
+details[open] { border-color: var(--ac); }
+summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+summary::after { content: '+'; font-size: 1.3rem; color: var(--ac2); transition: .2s; }
+details[open] summary::after { transform: rotate(45deg); }
+summary::-webkit-details-marker { display: none; }
+details p { color: var(--muted); margin-top: 10px; font-size: .92rem; }
+
+/* ===== PAGE JEU ===== */
+.crumbs { font-size: .85rem; color: var(--muted); font-weight: 600; margin-bottom: 18px; }
+.crumbs a { color: var(--ac2); cursor: pointer; }
+.banner { position: relative; overflow: hidden; display: flex; align-items: center; gap: 26px; padding: 30px; border-radius: 30px; border: 1px solid var(--line); background: var(--surface); backdrop-filter: blur(18px); margin-bottom: 26px; }
+.banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--ac) 45%, transparent), transparent 60%), radial-gradient(ellipse at 100% 100%, color-mix(in srgb, var(--ac2) 30%, transparent), transparent 55%); opacity: .55; pointer-events: none; }
+.banner > * { position: relative; }
+.banner h1 { font-family: var(--font-d); font-size: 2.4rem; letter-spacing: -1.5px; line-height: 1.05; }
+.banner p { color: var(--muted); margin-top: 6px; font-weight: 500; }
+.banner .badges { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.mini { font-size: .74rem; font-weight: 700; padding: 5px 11px; border-radius: 999px; background: var(--glass); border: 1px solid var(--line); }
+
+.game-layout { display: grid; grid-template-columns: 1fr 380px; gap: 26px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 26px; padding: 26px; backdrop-filter: blur(18px); margin-bottom: 20px; }
+.panel h3 { font-family: var(--font-d); font-size: 1.15rem; letter-spacing: -.3px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.panel h3 i { font-style: normal; width: 28px; height: 28px; border-radius: 9px; background: var(--brand); color: #fff; display: grid; place-items: center; font-size: .82rem; font-weight: 800; }
+.packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.pack { position: relative; text-align: left; padding: 16px; border-radius: 18px; border: 1.5px solid var(--line); background: var(--surface-2); cursor: pointer; transition: .25s; color: var(--text); }
+.pack:hover { border-color: color-mix(in srgb, var(--ac) 65%, transparent); transform: translateY(-3px); }
+.pack.sel { border-color: var(--ac); background: color-mix(in srgb, var(--ac) 16%, transparent); box-shadow: 0 10px 30px color-mix(in srgb, var(--ac) 28%, transparent); }
+.pack.sel::after { content: '✓'; position: absolute; top: 10px; right: 10px; width: 22px; height: 22px; border-radius: 50%; background: var(--ac); color: #fff; font-size: .72rem; font-weight: 800; display: grid; place-items: center; }
+.pack-n { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: .96rem; line-height: 1.25; padding-right: 20px; }
+.pack-n img { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
+.pack-p { margin-top: 12px; font-weight: 800; font-size: 1.05rem; font-family: var(--font-d); }
+.pack-hot { position: absolute; top: -9px; left: 14px; font-size: .6rem; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; padding: 3px 9px; border-radius: 7px; }
+
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+.field label { display: block; font-weight: 700; font-size: .8rem; margin-bottom: 7px; color: var(--muted); }
+.field input { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface-2); color: var(--text); font-size: 1rem; transition: .2s; }
+.field input:focus { outline: none; border-color: var(--ac); box-shadow: 0 0 0 4px color-mix(in srgb, var(--ac) 20%, transparent); }
+.field input.bad { border-color: #f43f5e; }
+.hint { font-size: .78rem; color: var(--muted); margin-top: 12px; }
+
+.summary { position: sticky; top: 92px; }
+.sum-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; font-size: .92rem; color: var(--muted); font-weight: 600; }
+.sum-row b { color: var(--text); text-align: right; }
+.sum-total { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px dashed var(--line); margin-top: 8px; padding-top: 16px; font-weight: 700; }
+.sum-total b { font-family: var(--font-d); font-size: 1.7rem; letter-spacing: -1px; background: var(--brand-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.qty { display: inline-flex; align-items: center; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.qty button { width: 34px; height: 34px; border: none; background: none; color: var(--text); font-size: 1.1rem; cursor: pointer; transition: .15s; }
+.qty button:hover { background: var(--ac); color: #fff; }
+.qty input { width: 54px; text-align: center; border: none; background: none; color: var(--text); font-weight: 800; font-size: .95rem; -moz-appearance: textfield; }
+.qty input::-webkit-outer-spin-button, .qty input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.qty input:focus { outline: none; }
+.sum-actions { display: grid; gap: 10px; margin-top: 20px; }
+.err { padding: 12px 16px; border-radius: 13px; background: rgba(244,63,94,.13); border: 1px solid rgba(244,63,94,.35); color: #fb7185; font-weight: 600; font-size: .86rem; margin-bottom: 14px; display: none; }
+[data-theme="light"] .err { color: #be123c; }
+.err.show { display: block; }
+
+/* ===== SUIVI ===== */
+.track-box { max-width: 560px; }
+.track-form { display: flex; gap: 10px; margin-top: 8px; }
+.track-form input { flex: 1; padding: 15px 18px; border-radius: 15px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font-size: 1rem; }
+.track-form input:focus { outline: none; border-color: var(--ac); }
+.track-res { margin-top: 22px; }
+.tr-card { padding: 24px; border-radius: 24px; background: var(--surface); border: 1px solid var(--line); backdrop-filter: blur(18px); animation: rise .4s; }
+.tr-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 10px; }
+.status { padding: 6px 14px; border-radius: 999px; font-weight: 800; font-size: .78rem; text-transform: uppercase; letter-spacing: .5px; background: rgba(251,191,36,.15); color: #fbbf24; border: 1px solid rgba(251,191,36,.35); }
+.status.done { background: rgba(34,197,94,.15); color: #4ade80; border-color: rgba(34,197,94,.4); }
+.status.bad { background: rgba(244,63,94,.15); color: #fb7185; border-color: rgba(244,63,94,.4); }
+[data-theme="light"] .status { color: #b45309; } [data-theme="light"] .status.done { color: #166534; } [data-theme="light"] .status.bad { color: #be123c; }
+
+/* ===== OVERLAY / PANIER ===== */
+.overlay { position: fixed; inset: 0; background: rgba(3,2,10,.6); backdrop-filter: blur(8px); z-index: 100; opacity: 0; pointer-events: none; transition: .3s; }
 .overlay.open { opacity: 1; pointer-events: auto; }
+.drawer { position: fixed; top: 0; right: 0; height: 100%; width: 460px; max-width: 100vw; z-index: 101; display: flex; flex-direction: column; background: var(--glass); border-left: 1px solid var(--line); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); transform: translateX(105%); transition: transform .45s cubic-bezier(.2,.8,.2,1); box-shadow: -30px 0 90px rgba(0,0,0,.45); overflow: hidden; }
+.drawer.open { transform: none; }
+.drawer::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 0 0, rgba(139,92,246,.22), transparent 45%), radial-gradient(circle at 100% 100%, rgba(34,211,238,.12), transparent 45%); }
+.d-head { position: relative; display: flex; justify-content: space-between; align-items: center; padding: 22px 24px; border-bottom: 1px solid var(--line); }
+.d-head h2 { font-family: var(--font-d); font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+.pillc { background: var(--brand); color: #fff; font-family: var(--font); font-size: .72rem; padding: 3px 10px; border-radius: 999px; font-weight: 800; }
+.x { width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; font-size: 1rem; transition: .3s; }
+.x:hover { transform: rotate(90deg); border-color: var(--ac); }
+.d-body { position: relative; flex: 1; overflow-y: auto; padding: 18px 24px; min-height: 0; scrollbar-width: thin; scrollbar-color: var(--ac) transparent; }
+.d-foot { position: relative; padding: 18px 24px 24px; border-top: 1px solid var(--line); background: var(--surface-2); }
+.ci { display: flex; gap: 14px; padding: 14px; margin-bottom: 12px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); animation: rise .35s; }
+.ci-main { flex: 1; min-width: 0; }
+.ci-main strong { display: block; font-family: var(--font-d); font-size: 1rem; }
+.ci-pack { color: var(--ac2); font-weight: 700; font-size: .85rem; }
+.ci-meta { color: var(--muted); font-size: .76rem; margin-top: 5px; word-break: break-word; line-height: 1.6; }
+.ci-meta b { color: var(--text); font-weight: 600; }
+.ci-bot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.ci-price { font-weight: 800; font-family: var(--font-d); }
+.ci-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; align-self: flex-start; transition: .2s; padding: 2px 4px; }
+.ci-del:hover { color: #f43f5e; transform: scale(1.2); }
+.empty { text-align: center; padding: 60px 16px; color: var(--muted); }
+.empty .big { font-size: 3.6rem; margin-bottom: 12px; }
+.empty p { margin-bottom: 20px; }
+.done-box { text-align: center; padding: 50px 10px; }
+.done-box .ok { width: 84px; height: 84px; margin: 0 auto 20px; border-radius: 50%; background: linear-gradient(135deg, #22c55e, #15803d); display: grid; place-items: center; font-size: 2.4rem; color: #fff; box-shadow: 0 14px 40px rgba(34,197,94,.45); animation: pop .5s cubic-bezier(.2,1.4,.4,1); }
+@keyframes pop { from { transform: scale(0); } }
+.done-box h3 { font-family: var(--font-d); font-size: 1.5rem; margin-bottom: 8px; }
+.done-box p { color: var(--muted); margin-bottom: 22px; font-size: .94rem; }
+.free { font-size: .75rem; text-align: center; margin-top: 12px; color: var(--muted); font-weight: 600; }
 
-.cart {
-  position: fixed; top: 50%; left: 50%;
-  transform: translate(-50%,-50%) scale(.9);
-  width: 540px; max-width: 94vw;
-  height: 85vh; max-height: 700px;
-  background: var(--glass);
-  border: 1px solid color-mix(in srgb, var(--violet) 30%, transparent);
-  border-radius: 28px;
-  z-index: 101;
-  display: flex; flex-direction: column;
-  opacity: 0; pointer-events: none;
-  transition: .35s cubic-bezier(.4,0,.2,1);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  backdrop-filter: blur(40px) saturate(180%);
-}
-.cart::before {
-  content:''; position: absolute; inset: 0;
-  background:
-    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--violet) 18%, transparent), transparent 40%),
-    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--violet3) 18%, transparent), transparent 40%);
-  pointer-events: none;
-}
-.cart.open { opacity: 1; pointer-events: auto; transform: translate(-50%,-50%) scale(1); }
+/* ===== TOAST / FOOTER / MOBILE NAV ===== */
+.toasts { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 300; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; }
+.toast { padding: 13px 22px; border-radius: 14px; font-weight: 700; font-size: .9rem; color: #fff; background: #1a1635; border: 1px solid rgba(167,139,250,.4); box-shadow: 0 14px 44px rgba(0,0,0,.5); animation: tin .4s cubic-bezier(.2,.8,.2,1); max-width: 92vw; text-align: center; }
+.toast.ok { border-color: rgba(34,197,94,.55); }
+@keyframes tin { from { opacity: 0; transform: translateY(20px) scale(.95); } }
+footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-filter: blur(20px); padding: 40px 0; color: var(--muted); font-size: .86rem; }
+.ft { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: center; }
+.ft b { color: var(--text); }
+.mnav { display: none; }
 
-.cart-content { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
-
-.cart-head {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 22px 26px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
+@media (max-width: 980px) {
+  .hero { grid-template-columns: 1fr; padding-top: 24px; }
+  .stack { display: none; }
+  .game-layout { grid-template-columns: 1fr; }
+  .summary { position: static; }
+  .hsearch { display: none; }
 }
-.cart-head h2 { font-size: 1.25rem; font-weight: 800; letter-spacing: -.3px; }
-.cart-close {
-  background: var(--bg2); border: 1px solid var(--border);
-  width: 38px; height: 38px; border-radius: 12px;
-  font-size: 1rem; cursor: pointer; color: var(--text);
-  transition: .3s; backdrop-filter: blur(20px);
-}
-.cart-close:hover { border-color: var(--violet); color: var(--violet); transform: rotate(90deg); }
-
-.cart-body {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 20px 26px;
-  min-height: 0;
-  scrollbar-width: thin;
-  scrollbar-color: var(--violet) transparent;
-}
-.cart-body::-webkit-scrollbar { width: 6px; }
-.cart-body::-webkit-scrollbar-track { background: transparent; }
-.cart-body::-webkit-scrollbar-thumb { background: var(--violet2); border-radius: 3px; }
-
-.cart-info {
-  display: flex; align-items: center; gap: 16px;
-  padding: 18px; margin-bottom: 22px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  backdrop-filter: blur(20px);
-}
-/* Icône du jeu dans le panier — 72px */
-.cart-info .game-img { width: 72px; height: 72px; margin: 0; border-radius: 18px; flex-shrink: 0; }
-.cart-info strong { display: block; font-size: 1.05rem; font-weight: 800; }
-.cart-info .pack-label {
-  background: linear-gradient(135deg, var(--violet), var(--violet3));
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 800; font-size: 1rem; margin-top: 3px;
-}
-
-.cart-foot {
-  padding: 20px 26px;
-  border-top: 1px solid var(--border);
-  background: var(--bg3);
-  flex-shrink: 0;
-}
-.cart-total { font-weight: 800; font-size: 1.25rem; display: flex; justify-content: space-between; margin-bottom: 16px; }
-.cart-total span {
-  background: linear-gradient(135deg, var(--violet), var(--violet3));
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.field { margin-bottom: 16px; }
-.field label { display: block; font-weight: 700; font-size: .85rem; margin-bottom: 6px; }
-.field input {
-  width: 100%; padding: 13px 16px;
-  border: 1px solid var(--border); border-radius: 14px;
-  background: var(--bg3); color: var(--text);
-  font-size: 1rem; transition: .25s; backdrop-filter: blur(20px);
-}
-.field input:focus {
-  outline: none; border-color: var(--violet);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--violet) 15%, transparent);
-}
-
-.btn {
-  display: block; width: 100%; padding: 16px;
-  border-radius: 16px; border: none;
-  background: linear-gradient(135deg, var(--violet), var(--violet3));
-  color: #fff; font-weight: 800; font-size: 1rem;
-  cursor: pointer; transition: .3s;
-  box-shadow: 0 8px 28px color-mix(in srgb, var(--violet) 40%, transparent);
-  position: relative; overflow: hidden;
-}
-.btn::before {
-  content:''; position:absolute; inset:0;
-  background: linear-gradient(135deg, var(--violet3), var(--violet));
-  opacity:0; transition: opacity .3s;
-}
-.btn:hover::before { opacity: 1; }
-.btn:hover { transform: translateY(-2px); box-shadow: 0 14px 40px color-mix(in srgb, var(--violet) 50%, transparent); }
-.btn span { position: relative; z-index: 1; }
-.btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-
-.filters { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
-.filters input, .filters select {
-  padding: 12px 18px; border: 1px solid var(--border);
-  border-radius: 14px; background: var(--bg2); color: var(--text);
-  font-size: .95rem; font-weight: 500; backdrop-filter: blur(20px);
-}
-.filters input:focus, .filters select:focus { outline:none; border-color: var(--violet); }
-
-.msg { padding: 14px 18px; border-radius: 14px; margin-top: 16px; font-size: .9rem; display: none; font-weight: 600; }
-.msg.ok { background: #dcfce7; color: #166534; display: block; }
-.msg.err { background: #fee2e2; color: #991b1b; display: block; }
-[data-theme="dark"] .msg.ok { background: #14532d; color: #86efac; }
-[data-theme="dark"] .msg.err { background: #7f1d1d; color: #fca5a5; }
-
-@media (max-width: 640px) {
-  nav { gap: 18px; font-size: .85rem; }
-  nav a.active::after { display: none; }
-  .cart { width: 96vw; height: 90vh; }
-  .hero h1 { font-size: 1.9rem; }
-  .pack-name img { width: 30px; height: 30px; }
-  .pack-name { font-size: .92rem; gap: 8px; }
+@media (max-width: 720px) {
+  .wrap { padding: 0 16px; }
+  nav.top { display: none; }
+  .hd { height: 62px; }
+  .cart-btn small { display: none; }
+  .page { padding-top: 22px; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .card { padding: 16px; border-radius: 22px; gap: 12px; }
+  .tag { display: none; }
+  .banner { flex-direction: column; text-align: center; padding: 24px; }
+  .banner .badges { justify-content: center; }
+  .banner h1 { font-size: 1.9rem; }
+  .mnav { display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; bottom: 0; left: 0; right: 0; z-index: 70; background: var(--glass); border-top: 1px solid var(--line); backdrop-filter: blur(24px); padding: 6px 6px calc(6px + env(safe-area-inset-bottom)); }
+  .mnav a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 0; font-size: .68rem; font-weight: 700; color: var(--muted); border-radius: 12px; cursor: pointer; position: relative; }
+  .mnav a span { font-size: 1.25rem; }
+  .mnav a.active { color: var(--text); background: var(--surface-2); }
+  .mnav .badge { top: 0; right: calc(50% - 22px); }
+  body { padding-bottom: 72px; }
+  .toasts { bottom: 90px; }
+  .sec-head h2, h1.title { font-size: 1.6rem; }
+  .track-form { flex-direction: column; }
 }
 </style>
 </head>
 <body>
 
+<div class="bg"><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div></div>
+<div class="bg-grid"></div><div class="bg-noise"></div>
+
 <header>
-  <div class="container header-inner">
-    <div class="logo" onclick="go('accueil')">NEXYTOP</div>
-    <nav>
+  <div class="wrap hd">
+    <div class="logo" onclick="go('accueil')"><div class="logo-mark">N</div><b>NEXYTOP</b></div>
+    <nav class="top">
       <a onclick="go('accueil')" data-p="accueil" class="active">Accueil</a>
       <a onclick="go('catalogue')" data-p="catalogue">Catalogue</a>
       <a onclick="go('suivi')" data-p="suivi">Suivi</a>
     </nav>
-    <div class="actions">
-      <button class="btn-icon" onclick="openCart()">🛒<span class="badge" id="badge">0</span></button>
-      <button class="btn-icon" id="themeBtn">🌙</button>
-    </div>
+    <div class="sp"></div>
+    <div class="hsearch"><input type="search" id="hsearch" placeholder="Rechercher un jeu…  ( / )"></div>
+    <button class="icon-btn" id="themeBtn" aria-label="Changer de thème">🌙</button>
+    <button class="icon-btn cart-btn" onclick="openCart()" aria-label="Panier">🛒 <small id="hdTotal">Panier</small><span class="badge" id="badge">0</span></button>
   </div>
 </header>
 
 <main>
+  <!-- ACCUEIL -->
   <section id="p-accueil" class="page active">
-    <div class="hero">
-      <div class="container">
-        <h1>Rechargez vos jeux<br><span>au meilleur prix</span></h1>
-        <p>Livraison instantanée · Paiement en Ariary · Support 7j/7</p>
+    <div class="wrap">
+      <div class="hero">
+        <div>
+          <div class="pill"><i></i> Boutique en ligne · Livraison rapide</div>
+          <h1>Vos recharges de jeux, <em>sans prise de tête.</em></h1>
+          <p class="lead">Diamonds, UC, Robux, Nitro, Telegram… Payez en Ariary, indiquez votre ID de joueur et on s'occupe du reste.</p>
+          <div class="cta">
+            <button class="btn" onclick="go('catalogue')">Explorer le catalogue →</button>
+            <button class="btn ghost" onclick="go('suivi')">Suivre une commande</button>
+          </div>
+          <div class="hero-stats">
+            <div><b id="statGames">0</b><span>Jeux & services</span></div>
+            <div><b id="statPacks">0</b><span>Packs disponibles</span></div>
+            <div><b>7j/7</b><span>Support client</span></div>
+          </div>
+        </div>
+        <div class="stack" id="heroStack"></div>
       </div>
     </div>
-    <div class="container">
-      <h1>Jeux populaires</h1>
+
+    <div class="ticker"><div class="ticker-track" id="ticker"></div></div>
+
+    <div class="wrap">
+      <div class="sec-head">
+        <div><h2>Jeux populaires</h2><p>Les recharges les plus demandées du moment.</p></div>
+        <span class="link" onclick="go('catalogue')">Tout voir →</span>
+      </div>
       <div id="gridAccueil" class="grid"></div>
+
+      <div class="steps">
+        <div class="step"><div class="n">01</div><h4>Choisissez votre jeu</h4><p>Parcourez le catalogue et sélectionnez le pack qui vous convient.</p></div>
+        <div class="step"><div class="n">02</div><h4>Entrez votre ID</h4><p>Seul votre ID de joueur est nécessaire. Jamais de mot de passe.</p></div>
+        <div class="step"><div class="n">03</div><h4>Validez & recevez</h4><p>Confirmez la commande, on vous contacte et on recharge votre compte.</p></div>
+      </div>
+
+      <div class="faq">
+        <h2>Questions fréquentes</h2>
+        <details><summary>Faut-il donner mon mot de passe ?</summary><p>Non, jamais. Seul votre ID de joueur (et parfois votre serveur) est nécessaire pour la recharge.</p></details>
+        <details><summary>Combien de temps prend la livraison ?</summary><p>La plupart des recharges sont traitées en quelques minutes après la validation de votre commande.</p></details>
+        <details><summary>Comment suivre ma commande ?</summary><p>Rendez-vous dans l'onglet « Suivi » et entrez votre numéro de commande.</p></details>
+        <details><summary>En quelle monnaie payer ?</summary><p>Tous les prix sont affichés en Ariary (Ar), sans frais cachés.</p></details>
+      </div>
     </div>
   </section>
 
+  <!-- CATALOGUE -->
   <section id="p-catalogue" class="page">
-    <div class="container">
-      <h1>Catalogue</h1>
-      <div class="filters">
-        <input type="search" id="search" placeholder="Rechercher...">
-        <select id="catFilter"><option value="all">Toutes catégories</option></select>
-      </div>
+    <div class="wrap">
+      <div class="sec-head"><div><h1 class="title">Catalogue</h1><p id="catCount"></p></div></div>
+      <div class="chips" id="chips"></div>
       <div id="gridCatalogue" class="grid"></div>
     </div>
   </section>
 
+  <!-- JEU -->
   <section id="p-jeu" class="page">
-    <div class="container">
-      <a onclick="go('catalogue')" style="color:var(--violet);cursor:pointer;font-weight:700;font-size:.9rem;">← Retour</a>
-      <h1 id="gameTitle" style="margin-top:14px;"></h1>
-      <div id="packs" class="packs"></div>
+    <div class="wrap">
+      <div class="crumbs"><a onclick="go('catalogue')">Catalogue</a> / <span id="crumbName"></span></div>
+      <div class="banner">
+        <div id="bannerTile"></div>
+        <div>
+          <h1 id="gameTitle"></h1>
+          <p id="gameSub"></p>
+          <div class="badges"><span class="mini">⚡ Livraison rapide</span><span class="mini">🔒 Sans mot de passe</span><span class="mini">💬 Support 7j/7</span></div>
+        </div>
+      </div>
+      <div class="game-layout">
+        <div>
+          <div class="panel"><h3><i>1</i> Choisissez votre pack</h3><div class="packs" id="packs"></div></div>
+          <div class="panel"><h3><i>2</i> Vos informations</h3><div class="fields" id="fields"></div><p class="hint">💡 Vérifiez bien votre ID : une erreur peut retarder la livraison.</p></div>
+        </div>
+        <aside class="summary">
+          <div class="panel">
+            <h3>Récapitulatif</h3>
+            <div class="err" id="gameErr"></div>
+            <div class="sum-row"><span>Jeu</span><b id="sumGame">—</b></div>
+            <div class="sum-row"><span>Pack</span><b id="sumPack">Aucun</b></div>
+            <div class="sum-row"><span>Prix unitaire</span><b id="sumUnit">—</b></div>
+            <div class="sum-row"><span>Quantité</span>
+              <div class="qty"><button onclick="gqty(-1)">−</button><input id="gQty" type="number" value="1" min="1" onchange="gqtySet(this.value)"><button onclick="gqty(1)">+</button></div>
+            </div>
+            <div class="sum-total"><span>Total</span><b id="sumTotal">0 Ar</b></div>
+            <div class="sum-actions">
+              <button class="btn acc block" onclick="addFromGame(true)">⚡ Acheter maintenant</button>
+              <button class="btn ghost block" onclick="addFromGame(false)">🛒 Ajouter au panier</button>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
   </section>
 
+  <!-- SUIVI -->
   <section id="p-suivi" class="page">
-    <div class="container">
-      <h1>Suivi de commande</h1>
-      <div class="field" style="max-width:320px;">
-        <label>Numéro de commande</label>
-        <input type="text" id="trackId" placeholder="ex. 1">
+    <div class="wrap">
+      <div class="track-box">
+        <h1 class="title" style="margin-bottom:8px;">Suivi de commande</h1>
+        <p style="color:var(--muted);margin-bottom:22px;">Entrez votre numéro de commande pour connaître son statut.</p>
+        <div class="track-form">
+          <input type="text" id="trackId" placeholder="ex. 1" inputmode="numeric" onkeydown="if(event.key==='Enter')track()">
+          <button class="btn" id="trackBtn" onclick="track()">Suivre</button>
+        </div>
+        <div class="track-res" id="trackRes"></div>
       </div>
-      <button class="btn" onclick="track()" style="max-width:220px;"><span>Suivre</span></button>
-      <div id="trackMsg" class="msg"></div>
     </div>
   </section>
 </main>
 
+<footer><div class="wrap ft">
+  <div><b>NEXYTOP</b> · Recharges de jeux à Madagascar</div>
+  <div>© <span id="year"></span> Nexytop · Tous droits réservés</div>
+</div></footer>
+
+<nav class="mnav">
+  <a onclick="go('accueil')" data-p="accueil" class="active"><span>🏠</span>Accueil</a>
+  <a onclick="go('catalogue')" data-p="catalogue"><span>🎮</span>Catalogue</a>
+  <a onclick="go('suivi')" data-p="suivi"><span>📦</span>Suivi</a>
+  <a onclick="openCart()"><span>🛒</span>Panier<b class="badge" id="badge2">0</b></a>
+</nav>
+
 <div id="overlay" class="overlay" onclick="closeCart()"></div>
-<div id="cart" class="cart">
-  <div class="cart-content">
-    <div class="cart-head">
-      <h2>Finaliser la commande</h2>
-      <button class="cart-close" onclick="closeCart()">✕</button>
-    </div>
-    <div class="cart-body" id="cartBody"></div>
-    <div class="cart-foot">
-      <div class="cart-total">Total : <span id="cartTotal">0 Ar</span></div>
-      <button class="btn" id="validateBtn" onclick="validate()"><span>Valider la commande</span></button>
-    </div>
+<aside id="drawer" class="drawer" aria-label="Panier">
+  <div class="d-head"><h2>Mon panier <span class="pillc" id="cartCount">0</span></h2><button class="x" onclick="closeCart()" aria-label="Fermer">✕</button></div>
+  <div class="d-body" id="cartBody"></div>
+  <div class="d-foot" id="cartFoot">
+    <div class="field" style="margin-bottom:14px;"><label>Votre téléphone (pour vous contacter)</label><input type="tel" id="cartPhone" placeholder="034 00 000 00" autocomplete="tel"></div>
+    <div class="err" id="cartError"></div>
+    <div class="sum-row" style="padding:4px 0;"><span>Articles</span><b id="subCount">0</b></div>
+    <div class="sum-total" style="margin-bottom:16px;"><span>Total</span><b id="cartTotal">0 Ar</b></div>
+    <button class="btn block" id="validateBtn" onclick="validate()">Valider la commande</button>
+    <button class="btn ghost block" style="margin-top:10px;" onclick="clearCart()">Vider le panier</button>
+    <div class="free">🔒 Aucun mot de passe demandé · Support 7j/7</div>
   </div>
-</div>
+</aside>
+<div class="toasts" id="toasts"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* ================= DONNÉES (inchangées) ================= */
 const SUPABASE_URL = 'https://cjcuwccrqeqodwpxibhv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_6PUjD1K5U1TsBW6nza5c7w_nzK4bA1n';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -503,194 +541,245 @@ const DATA = [
 const $ = id => document.getElementById(id);
 const price = u => Math.ceil(u * USD_TO_MGA * (1+MARGIN) / ROUND) * ROUND;
 const fmt = n => n.toLocaleString('fr-FR') + ' Ar';
-
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const minPrice = g => price(Math.min(...g.packs.map(p => p.u)));
+const LABELS = {player_id:'Player ID',player_name:'Nom du joueur',phone:'Téléphone',uid:'UID',server:'Serveur',roblox_username:'Pseudo Roblox',steam_login:'Login Steam',discord_username:'Pseudo Discord',telegram_username:'@username',email:'Email'};
 const EMOJIS = {'pubg-mobile':'🔫','free-fire':'🔥','delta-force':'🎯','mobile-legends':'⚔️','roblox':'🧱','minecraft':'⛏️','genshin-impact':'✨','arena-breakout':'💥','honkai-star-rail':'🚂','blood-strike':'🩸','eafc-mobile-my':'⚽','steam':'🎮','discord':'💬','magic-chess-go-go-ru':'♟️','telegram-premium':'✈️','telegram-stars':'⭐','blood-strike-mena':'🩸','whiteout-survival':'❄️','magic-chess-go-go':'♟️'};
+/* couleur d'accent par jeu (présentation uniquement) */
+const COLORS = {'pubg-mobile':['#F59E0B','#B45309'],'free-fire':['#F97316','#DC2626'],'delta-force':['#10B981','#047857'],'mobile-legends':['#3B82F6','#1D4ED8'],'roblox':['#EF4444','#991B1B'],'minecraft':['#22C55E','#15803D'],'genshin-impact':['#38BDF8','#6366F1'],'arena-breakout':['#84CC16','#4D7C0F'],'honkai-star-rail':['#A78BFA','#6D28D9'],'blood-strike':['#F43F5E','#9F1239'],'eafc-mobile-my':['#14B8A6','#0F766E'],'steam':['#60A5FA','#1E3A8A'],'discord':['#818CF8','#4338CA'],'magic-chess-go-go-ru':['#E879F9','#A21CAF'],'telegram-premium':['#38BDF8','#0369A1'],'telegram-stars':['#FBBF24','#B45309'],'blood-strike-mena':['#FB7185','#9F1239'],'whiteout-survival':['#67E8F9','#0E7490'],'magic-chess-go-go':['#C084FC','#7E22CE']};
+const colors = s => COLORS[s] || ['#8B5CF6','#5B21B6'];
+const cssVars = s => { const [a,b] = colors(s); return `--c1:${a};--c2:${b}`; };
 
-const savedTheme = localStorage.getItem('nx-theme') || 'light';
+/* ================= Utilitaires ================= */
+const safeGet = (k, d) => { try { return localStorage.getItem(k) ?? d; } catch { return d; } };
+const safeSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+const uid = () => Math.random().toString(36).slice(2, 10);
+
+function tile(slug, size) {
+  const e = EMOJIS[slug] || '🎮';
+  return `<div class="tile ${size||''}" style="${cssVars(slug)}"><span class="emoji">${e}</span><img src="images/${slug}.png" alt="" loading="lazy" onload="this.previousElementSibling.style.display='none'" onerror="this.remove()"></div>`;
+}
+function toast(text) {
+  const t = document.createElement('div'); t.className = 'toast ok'; t.textContent = text; $('toasts').appendChild(t);
+  setTimeout(() => { t.style.transition = '.4s'; t.style.opacity = 0; t.style.transform = 'translateY(10px)'; setTimeout(() => t.remove(), 400); }, 3000);
+}
+
+/* ================= Thème ================= */
+const savedTheme = safeGet('nx-theme', 'dark');
 document.documentElement.setAttribute('data-theme', savedTheme);
 $('themeBtn').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 $('themeBtn').onclick = () => {
   const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('nx-theme', next);
+  document.documentElement.setAttribute('data-theme', next); safeSet('nx-theme', next);
   $('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
 };
 
+/* ================= Navigation ================= */
 function go(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   $('p-' + page).classList.add('active');
-  document.querySelectorAll('nav a').forEach(a => a.classList.toggle('active', a.dataset.p === page));
-  window.scrollTo(0, 0);
+  document.querySelectorAll('[data-p]').forEach(a => a.classList.toggle('active', a.dataset.p === page));
+  window.scrollTo({ top: 0 });
 }
 
-function imgHTML(slug) {
-  const emoji = EMOJIS[slug] || '🎮';
-  return `<div class="game-img">
-    <img src="images/${slug}.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-    <span class="emoji" style="display:none;">${emoji}</span>
+/* ================= Accueil ================= */
+const cardHTML = g => `
+  <div class="card" style="${cssVars(g.slug)}" onclick="ouvrirJeu('${g.slug}')">
+    <span class="tag">${esc(g.cat)}</span>
+    ${tile(g.slug, 'lg')}
+    <h3>${esc(g.name)}</h3>
+    <div class="meta"><div><span class="from">À partir de</span><span class="p">${fmt(minPrice(g))}</span></div><div class="go">→</div></div>
   </div>`;
-}
 
-function monnaieIcon(slug) {
-  return `<img src="images/monnaie-${slug}.png" alt="" onerror="this.style.display='none';">`;
-}
-
-function renderAccueil() {
-  $('gridAccueil').innerHTML = DATA.slice(0, 8).map(g => `
-    <div class="game-card" onclick="ouvrirJeu('${g.slug}')">
-      ${imgHTML(g.slug)}
-      <h3>${g.name}</h3>
-      <div class="price">dès ${fmt(price(Math.min(...g.packs.map(p=>p.u))))}</div>
+function renderHome() {
+  $('gridAccueil').innerHTML = DATA.slice(0, 8).map(cardHTML).join('');
+  const feat = ['pubg-mobile', 'free-fire', 'mobile-legends'].map(s => DATA.find(g => g.slug === s)).filter(Boolean);
+  $('heroStack').innerHTML = feat.map((g, i) => `
+    <div class="float-card fc${i+1}" style="${cssVars(g.slug)}" onclick="ouvrirJeu('${g.slug}')">
+      ${tile(g.slug)}
+      <div><strong>${esc(g.name)}</strong><span>${g.packs.length} packs</span><em>dès ${fmt(minPrice(g))}</em></div>
     </div>`).join('');
+  const names = DATA.map(g => `<span>${EMOJIS[g.slug] || '🎮'} ${esc(g.name)}</span>`).join('');
+  $('ticker').innerHTML = names + names;
+  $('statGames').textContent = DATA.length;
+  $('statPacks').textContent = DATA.reduce((s, g) => s + g.packs.length, 0);
 }
 
+/* ================= Catalogue ================= */
+let curCat = 'all', curQuery = '';
+function renderChips() {
+  const cats = ['all', ...new Set(DATA.map(g => g.cat))];
+  $('chips').innerHTML = cats.map(c => `<button class="chip ${c === curCat ? 'on' : ''}" onclick="setCat('${c}')">${c === 'all' ? 'Tout' : esc(c)}</button>`).join('');
+}
+function setCat(c) { curCat = c; renderChips(); renderCatalogue(); }
 function renderCatalogue() {
-  const q = $('search').value.toLowerCase();
-  const cat = $('catFilter').value;
-  const list = DATA.filter(g => (cat==='all'||g.cat===cat) && g.name.toLowerCase().includes(q));
-  $('gridCatalogue').innerHTML = list.map(g => `
-    <div class="game-card" onclick="ouvrirJeu('${g.slug}')">
-      ${imgHTML(g.slug)}
-      <h3>${g.name}</h3>
-      <div class="price">dès ${fmt(price(Math.min(...g.packs.map(p=>p.u))))}</div>
-    </div>`).join('');
+  const q = curQuery.toLowerCase();
+  const list = DATA.filter(g => (curCat === 'all' || g.cat === curCat) && g.name.toLowerCase().includes(q));
+  $('catCount').textContent = list.length + ' résultat' + (list.length > 1 ? 's' : '');
+  $('gridCatalogue').innerHTML = list.length ? list.map(cardHTML).join('') : '<div class="empty" style="grid-column:1/-1"><div class="big">🔍</div><p>Aucun jeu ne correspond à votre recherche.</p></div>';
 }
-$('search').addEventListener('input', renderCatalogue);
-$('catFilter').addEventListener('change', renderCatalogue);
+$('hsearch').addEventListener('input', e => {
+  curQuery = e.target.value;
+  if (!$('p-catalogue').classList.contains('active')) go('catalogue');
+  renderCatalogue();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeCart();
+  if (e.key === '/' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); $('hsearch').focus(); }
+});
 
-let currentGame = null;
+/* ================= Page jeu ================= */
+let G = null, gPack = null, gQty = 1;
+const qtyMax = () => G.slug === 'telegram-stars' ? 5000 : G.slug === 'steam' ? 100 : 20;
 
 function ouvrirJeu(slug) {
-  const game = DATA.find(g => g.slug === slug);
-  if (!game) return;
-  currentGame = game;
+  const game = DATA.find(g => g.slug === slug); if (!game) return;
+  G = game; gPack = game.packs.length === 1 ? 0 : null; gQty = 1;
+  const [c1, c2] = colors(slug);
+  $('p-jeu').style.setProperty('--ac', c1); $('p-jeu').style.setProperty('--ac2', c2);
+  $('crumbName').textContent = game.name;
   $('gameTitle').textContent = game.name;
+  $('gameSub').textContent = `${game.packs.length} pack${game.packs.length > 1 ? 's' : ''} · ${game.cat} · dès ${fmt(minPrice(game))}`;
+  $('bannerTile').innerHTML = tile(slug, 'xl');
+  const hot = game.packs.length >= 4 ? 2 : -1;
   $('packs').innerHTML = game.packs.map((p, i) => `
-    <div class="pack" onclick="openForPack(${i})">
-      <div class="pack-name">${monnaieIcon(game.slug)}${p.n}</div>
-      <div class="pack-price">${fmt(price(p.u))}</div>
-    </div>`).join('');
+    <button class="pack" data-i="${i}" onclick="selectPack(${i})">
+      ${i === hot ? '<span class="pack-hot">Populaire</span>' : ''}
+      <div class="pack-n"><img src="images/monnaie-${slug}.png" alt="" onerror="this.remove()">${esc(p.n)}</div>
+      <div class="pack-p">${fmt(price(p.u))}</div>
+    </button>`).join('');
+  $('fields').innerHTML = game.fields.filter(f => f !== 'phone').map(f => `
+    <div class="field"><label>${LABELS[f] || f}</label><input type="text" name="${f}" autocomplete="off"></div>`).join('');
+  $('gameErr').classList.remove('show');
+  refreshSummary();
   go('jeu');
 }
-
-let selectedPackIndex = null;
-
-function openCart() {
-  $('cart').classList.add('open');
-  $('overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+function selectPack(i) { gPack = i; refreshSummary(); }
+function gqty(d) { gqtySet(gQty + d); }
+function gqtySet(v) { gQty = Math.max(1, Math.min(qtyMax(), parseInt(v) || 1)); refreshSummary(); }
+function refreshSummary() {
+  document.querySelectorAll('#packs .pack').forEach(el => el.classList.toggle('sel', +el.dataset.i === gPack));
+  $('sumGame').textContent = G.name;
+  $('gQty').value = gQty; $('gQty').max = qtyMax();
+  if (gPack === null) { $('sumPack').textContent = 'Aucun'; $('sumUnit').textContent = '—'; $('sumTotal').textContent = fmt(0); return; }
+  const p = G.packs[gPack], u = price(p.u);
+  $('sumPack').textContent = p.n; $('sumUnit').textContent = fmt(u); $('sumTotal').textContent = fmt(u * gQty);
 }
-function closeCart() {
-  $('cart').classList.remove('open');
-  $('overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function openForPack(index) {
-  selectedPackIndex = index;
-  const p = currentGame.packs[index];
-  const labels = {player_id:'Player ID',player_name:'Nom du joueur',phone:'Téléphone',uid:'UID',server:'Serveur',roblox_username:'Pseudo Roblox',steam_login:'Login Steam',discord_username:'Pseudo Discord',telegram_username:'@username',email:'Email'};
-
-  const fieldsHTML = currentGame.fields.map(f => `
-    <div class="field">
-      <label>${labels[f]||f}</label>
-      <input type="text" name="${f}">
-    </div>`).join('');
-
-  $('cartBody').innerHTML = `
-    <div class="cart-info">
-      ${imgHTML(currentGame.slug)}
-      <div>
-        <strong>${currentGame.name}</strong>
-        <div class="pack-label">${p.n} — ${fmt(price(p.u))}</div>
-      </div>
-    </div>
-    <div id="cartError" class="msg err" style="display:none;margin-bottom:16px;"></div>
-    ${fieldsHTML}
-  `;
-  $('cartTotal').textContent = fmt(price(p.u));
-  openCart();
-
-  setTimeout(() => {
-    const firstInput = document.querySelector('#cartBody input');
-    if (firstInput) firstInput.focus();
-  }, 350);
-}
-
-async function validate() {
-  if (!currentGame || selectedPackIndex === null) return;
-
-  const errEl = $('cartError');
-  errEl.style.display = 'none';
-
-  const inputs = document.querySelectorAll('#cartBody input');
+function addFromGame(buyNow) {
+  const err = $('gameErr'); err.classList.remove('show');
+  if (gPack === null) { err.textContent = 'Choisissez d\'abord un pack.'; err.classList.add('show'); return; }
   const fields = {};
-  for (const inp of inputs) {
+  for (const inp of document.querySelectorAll('#fields input')) {
+    inp.classList.remove('bad');
     if (!inp.value.trim()) {
-      errEl.textContent = `Remplissez le champ « ${inp.previousElementSibling.textContent} ».`;
-      errEl.style.display = 'block';
-      inp.focus();
-      return;
+      inp.classList.add('bad'); inp.focus();
+      err.textContent = `Remplissez le champ « ${inp.previousElementSibling.textContent} ».`; err.classList.add('show'); return;
     }
     fields[inp.name] = inp.value.trim();
   }
-  const p = currentGame.packs[selectedPackIndex];
-  const btn = $('validateBtn');
-  btn.disabled = true; btn.querySelector('span').textContent = 'Envoi...';
-
-  try {
-    const { error } = await db.from('commandes').insert({
-      jeu: currentGame.name,
-      pack: p.n,
-      prix_ar: price(p.u),
-      player_id: fields.player_id || fields.uid || fields.roblox_username || fields.telegram_username || fields.steam_login || fields.email || '',
-      nom_joueur: fields.player_name || fields.discord_username || '',
-      telephone: fields.phone || ''
-    });
-    if (error) throw error;
-    closeCart();
-    selectedPackIndex = null;
-    alert('✅ Commande enregistrée ! Nous vous contacterons bientôt.');
-  } catch (err) {
-    errEl.textContent = 'Erreur : ' + (err.message || 'réessayez');
-    errEl.style.display = 'block';
-  } finally {
-    btn.disabled = false; btn.querySelector('span').textContent = 'Valider la commande';
-  }
+  const p = G.packs[gPack];
+  const ex = cart.find(i => i.slug === G.slug && i.pack === p.n && JSON.stringify(i.fields) === JSON.stringify(fields));
+  if (ex) ex.qty = Math.min(5000, ex.qty + gQty);
+  else cart.push({ id: uid(), slug: G.slug, game: G.name, pack: p.n, unit: price(p.u), qty: gQty, fields });
+  saveCart(); renderCart(); bump();
+  if (buyNow) openCart(); else toast('✅ Ajouté au panier');
 }
 
+/* ================= Panier ================= */
+let cart = [];
+try { cart = JSON.parse(safeGet('nx-cart', '[]')) || []; } catch { cart = []; }
+let orderDone = null;
+const saveCart = () => safeSet('nx-cart', JSON.stringify(cart));
+function bump() { ['badge','badge2'].forEach(id => { const b = $(id); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }); }
+
+function changeQty(id, d) { const it = cart.find(i => i.id === id); if (!it) return; it.qty = Math.max(1, Math.min(5000, it.qty + d)); saveCart(); renderCart(); }
+function removeItem(id) { cart = cart.filter(i => i.id !== id); saveCart(); renderCart(); }
+function clearCart() { cart = []; saveCart(); renderCart(); }
+
+function renderCart() {
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  const total = cart.reduce((s, i) => s + i.unit * i.qty, 0);
+  ['badge','badge2'].forEach(id => { $(id).textContent = cart.length; $(id).classList.toggle('show', cart.length > 0); });
+  $('hdTotal').textContent = cart.length ? fmt(total) : 'Panier';
+  $('cartCount').textContent = cart.length; $('subCount').textContent = count; $('cartTotal').textContent = fmt(total);
+
+  if (orderDone) {
+    $('cartFoot').style.display = 'none';
+    $('cartBody').innerHTML = `<div class="done-box"><div class="ok">✓</div><h3>Commande envoyée !</h3>
+      <p>Merci ! Nous vous contacterons très bientôt au <b>${esc(orderDone)}</b> pour finaliser la recharge.</p>
+      <button class="btn block" onclick="orderDone=null;closeCart();go('accueil')">Retour à l'accueil</button>
+      <button class="btn ghost block" style="margin-top:10px;" onclick="orderDone=null;closeCart();go('suivi')">Suivre ma commande</button></div>`;
+    return;
+  }
+  $('cartFoot').style.display = cart.length ? '' : 'none';
+  if (!cart.length) {
+    $('cartBody').innerHTML = `<div class="empty"><div class="big">🛒</div><p>Votre panier est vide.</p>
+      <button class="btn" onclick="closeCart();go('catalogue')">Parcourir le catalogue</button></div>`;
+    return;
+  }
+  $('cartBody').innerHTML = cart.map(i => {
+    const meta = Object.entries(i.fields).map(([k, v]) => `${LABELS[k] || k} : <b>${esc(v)}</b>`).join('<br>');
+    return `<div class="ci">${tile(i.slug, 'sm')}
+      <div class="ci-main"><strong>${esc(i.game)}</strong><div class="ci-pack">${esc(i.pack)}</div><div class="ci-meta">${meta}</div>
+        <div class="ci-bot"><div class="qty"><button onclick="changeQty('${i.id}',-1)">−</button><input value="${i.qty}" readonly><button onclick="changeQty('${i.id}',1)">+</button></div>
+        <div class="ci-price">${fmt(i.unit * i.qty)}</div></div></div>
+      <button class="ci-del" onclick="removeItem('${i.id}')" aria-label="Supprimer">✕</button></div>`;
+  }).join('');
+}
+function openCart() {
+  renderCart(); $('cartPhone').value = safeGet('nx-phone', '');
+  $('drawer').classList.add('open'); $('overlay').classList.add('open'); document.body.style.overflow = 'hidden';
+}
+function closeCart() { $('drawer').classList.remove('open'); $('overlay').classList.remove('open'); document.body.style.overflow = ''; if (orderDone) { orderDone = null; renderCart(); } }
+
+/* ================= Validation (Supabase) ================= */
+async function validate() {
+  const errEl = $('cartError'); errEl.classList.remove('show');
+  if (!cart.length) return;
+  const phone = $('cartPhone').value.trim();
+  if (phone.replace(/\D/g, '').length < 8) { errEl.textContent = 'Entrez un numéro de téléphone valide.'; errEl.classList.add('show'); $('cartPhone').focus(); return; }
+  safeSet('nx-phone', phone);
+  const btn = $('validateBtn'); btn.disabled = true; btn.textContent = 'Envoi en cours…';
+  const rows = cart.map(i => { const f = i.fields; return {
+    jeu: i.game,
+    pack: i.qty > 1 ? `${i.pack} ×${i.qty}` : i.pack,
+    prix_ar: i.unit * i.qty,
+    player_id: f.player_id || f.uid || f.roblox_username || f.telegram_username || f.steam_login || f.email || '',
+    nom_joueur: f.player_name || f.discord_username || '',
+    telephone: phone
+  }; });
+  try {
+    const { error } = await db.from('commandes').insert(rows);
+    if (error) throw error;
+    cart = []; saveCart(); orderDone = phone; renderCart();
+  } catch (err) {
+    errEl.textContent = 'Erreur : ' + (err.message || 'réessayez'); errEl.classList.add('show');
+  } finally { btn.disabled = false; btn.textContent = 'Valider la commande'; }
+}
+
+/* ================= Suivi ================= */
 async function track() {
-  const id = $('trackId').value.trim();
-  const msg = $('trackMsg');
+  const id = $('trackId').value.trim(); const res = $('trackRes');
   if (!id) return;
+  const btn = $('trackBtn'); btn.disabled = true; btn.textContent = '…';
   try {
     const { data, error } = await db.from('commandes').select('*').eq('id', id).limit(1);
     if (error) throw error;
     if (data && data.length) {
-      msg.className = 'msg ok';
-      msg.textContent = `Commande n°${id} : ${data[0].statut} — ${fmt(data[0].prix_ar)}`;
-    } else {
-      msg.className = 'msg err';
-      msg.textContent = 'Commande introuvable.';
-    }
-  } catch {
-    msg.className = 'msg err';
-    msg.textContent = 'Erreur de connexion.';
-  }
+      const c = data[0], st = String(c.statut || 'en attente'), l = st.toLowerCase();
+      const cls = /livr|termin|complet|done|ok/.test(l) ? 'done' : /annul|refus|echou|échou|cancel/.test(l) ? 'bad' : '';
+      res.innerHTML = `<div class="tr-card"><div class="tr-top"><strong style="font-family:var(--font-d);font-size:1.2rem;">Commande n°${esc(id)}</strong><span class="status ${cls}">${esc(st)}</span></div>
+        <div class="sum-row"><span>Jeu</span><b>${esc(c.jeu || '—')}</b></div>
+        <div class="sum-row"><span>Pack</span><b>${esc(c.pack || '—')}</b></div>
+        <div class="sum-total"><span>Montant</span><b>${fmt(Number(c.prix_ar) || 0)}</b></div></div>`;
+    } else res.innerHTML = '<div class="err show">Commande introuvable. Vérifiez le numéro.</div>';
+  } catch { res.innerHTML = '<div class="err show">Erreur de connexion. Réessayez.</div>'; }
+  finally { btn.disabled = false; btn.textContent = 'Suivre'; }
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeCart();
-});
-
-const cats = [...new Set(DATA.map(g => g.cat))];
-cats.forEach(c => {
-  const o = document.createElement('option');
-  o.value = c; o.textContent = c;
-  $('catFilter').appendChild(o);
-});
-renderAccueil();
-renderCatalogue();
+/* ================= Init ================= */
+$('year').textContent = new Date().getFullYear();
+renderHome(); renderChips(); renderCatalogue(); renderCart();
 </script>
 </body>
 </html>
