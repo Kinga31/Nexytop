@@ -403,7 +403,16 @@ footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-f
       <div class="game-layout">
         <div>
           <div class="panel"><h3><i>1</i> Choisissez votre pack</h3><div class="packs" id="packs"></div></div>
-          <div class="panel"><h3><i>2</i> Vos informations</h3><div class="fields" id="fields"></div><p class="hint">💡 Vérifiez bien votre ID : une erreur peut retarder la livraison.</p></div>
+          <div class="panel">
+            <h3><i>2</i> Vos informations</h3>
+            <div class="fields" id="fields"></div>
+            <div class="field" style="margin-top:14px;">
+              <label>Référence de transaction (Mobile Money)</label>
+              <input type="text" id="refTransaction" placeholder="Ex: TXN-ABC123" autocomplete="off">
+              <p class="hint" style="margin-top:6px;">💡 Copiez la référence reçue par SMS après votre paiement.</p>
+            </div>
+            <p class="hint">💡 Vérifiez bien votre ID : une erreur peut retarder la livraison.</p>
+          </div>
         </div>
         <aside class="summary">
           <div class="panel">
@@ -459,7 +468,10 @@ footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-f
   <div class="d-head"><h2>Mon panier <span class="pillc" id="cartCount">0</span></h2><button class="x" onclick="closeCart()" aria-label="Fermer">✕</button></div>
   <div class="d-body" id="cartBody"></div>
   <div class="d-foot" id="cartFoot">
-    <div class="field" style="margin-bottom:14px;"><label>Votre téléphone (pour vous contacter)</label><input type="tel" id="cartPhone" placeholder="034 00 000 00" autocomplete="tel"></div>
+    <div class="field" style="margin-bottom:14px;">
+      <label>Votre téléphone <span style="color:var(--muted);font-weight:400;">(optionnel)</span></label>
+      <input type="tel" id="cartPhone" placeholder="034 00 000 00" autocomplete="tel">
+    </div>
     <div class="err" id="cartError"></div>
     <div class="sum-row" style="padding:4px 0;"><span>Articles</span><b id="subCount">0</b></div>
     <div class="sum-total" style="margin-bottom:16px;"><span>Total</span><b id="cartTotal">0 Ar</b></div>
@@ -472,68 +484,68 @@ footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-f
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* ================= DONNÉES (inchangées) ================= */
+/* ================= CONFIG ================= */
 const SUPABASE_URL = 'https://cjcuwccrqeqodwpxibhv.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_6PUjD1K5U1TsBW6nza5c7w_nzK4bA1n';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const USD_TO_MGA = 4580, MARGIN = 0.185, ROUND = 100;
 
 const DATA = [
-  {slug:'pubg-mobile',name:'PUBG Mobile',cat:'Top-ups',fields:['player_id','player_name','phone'],packs:[
+  {slug:'pubg-mobile',name:'PUBG Mobile',cat:'Top-ups',fields:['player_id','player_name'],packs:[
     {n:'60 UC',u:0.92},{n:'325 UC',u:4.63},{n:'660 UC',u:9.17},{n:'1800 UC',u:22.91},{n:'3850 UC',u:45.76},{n:'8100 UC',u:91.34},{n:'16200 UC',u:183.34}
   ]},
-  {slug:'free-fire',name:'Free Fire',cat:'Top-ups',fields:['player_id','player_name','phone'],packs:[
+  {slug:'free-fire',name:'Free Fire',cat:'Top-ups',fields:['player_id','player_name'],packs:[
     {n:'110 Diamonds',u:0.81},{n:'572 Diamonds',u:4.00},{n:'1166 Diamonds',u:7.97},{n:'2398 Diamonds',u:15.88},{n:'6160 Diamonds',u:40.13}
   ]},
-  {slug:'delta-force',name:'Delta Force',cat:'Top-ups',fields:['player_id','player_name','phone'],packs:[
+  {slug:'delta-force',name:'Delta Force',cat:'Top-ups',fields:['player_id','player_name'],packs:[
     {n:'18 Delta Coins',u:0.25},{n:'60 Delta Coins',u:0.81},{n:'320 Delta Coins',u:4.08},{n:'750 Delta Coins',u:8.15},{n:'1980 Delta Coins',u:20.37},{n:'3950 Delta Coins',u:40.74}
   ]},
-  {slug:'mobile-legends',name:'Mobile Legends',cat:'Top-ups',fields:['player_id','player_name','phone'],packs:[
+  {slug:'mobile-legends',name:'Mobile Legends',cat:'Top-ups',fields:['player_id','player_name'],packs:[
     {n:'50+5 Diamonds',u:0.72},{n:'150+15 Diamonds',u:2.15},{n:'257 Diamonds',u:3.20},{n:'429 Diamonds',u:5.47},{n:'706 Diamonds',u:8.68},{n:'1060 Diamonds',u:13.39}
   ]},
-  {slug:'roblox',name:'Roblox',cat:'Top-ups',fields:['roblox_username','phone'],packs:[
+  {slug:'roblox',name:'Roblox',cat:'Top-ups',fields:['roblox_username'],packs:[
     {n:'50 Robux',u:1.04},{n:'200 Robux',u:3.03},{n:'800 Robux',u:9.54},{n:'2000 Robux',u:23.24},{n:'3000 Robux',u:35.01}
   ]},
-  {slug:'minecraft',name:'Minecraft',cat:'Top-ups',fields:['email','phone'],packs:[
+  {slug:'minecraft',name:'Minecraft',cat:'Top-ups',fields:['email'],packs:[
     {n:'Java & Bedrock',u:17.81},{n:'1720 Minecoins',u:8.64},{n:'8800 Minecoins',u:52.09}
   ]},
-  {slug:'genshin-impact',name:'Genshin Impact',cat:'Top-ups',fields:['uid','server','player_name','phone'],packs:[
+  {slug:'genshin-impact',name:'Genshin Impact',cat:'Top-ups',fields:['uid','server','player_name'],packs:[
     {n:'60 Crystals',u:1.03},{n:'330 Crystals',u:5.14},{n:'1090 Crystals',u:15.39},{n:'2240 Crystals',u:30.77},{n:'3880 Crystals',u:51.28}
   ]},
-  {slug:'arena-breakout',name:'Arena Breakout',cat:'Top-ups',fields:['player_id','player_name','phone'],packs:[
+  {slug:'arena-breakout',name:'Arena Breakout',cat:'Top-ups',fields:['player_id','player_name'],packs:[
     {n:'66 Bonds',u:0.83},{n:'335 Bonds',u:4.17},{n:'675 Bonds',u:8.35},{n:'1690 Bonds',u:20.85},{n:'3400 Bonds',u:41.75}
   ]},
-  {slug:'honkai-star-rail',name:'Honkai: Star Rail',cat:'Top-ups',fields:['uid','server','player_name','phone'],packs:[
+  {slug:'honkai-star-rail',name:'Honkai: Star Rail',cat:'Top-ups',fields:['uid','server','player_name'],packs:[
     {n:'Express Pass',u:4.52},{n:'60 Shards',u:0.92},{n:'330 Shards',u:4.52},{n:'1090 Shards',u:14.41},{n:'2240 Shards',u:27.25}
   ]},
-  {slug:'blood-strike',name:'Blood Strike',cat:'Top-ups',fields:['player_id','player_name','phone'],packs:[
+  {slug:'blood-strike',name:'Blood Strike',cat:'Top-ups',fields:['player_id','player_name'],packs:[
     {n:'51 Gold',u:0.42},{n:'320 Gold',u:2.31},{n:'1100 Gold',u:7.68},{n:'2260 Gold',u:15.25}
   ]},
-  {slug:'eafc-mobile-my',name:'EAFC Mobile',cat:'Top-ups',fields:['player_id','player_name','phone'],packs:[
+  {slug:'eafc-mobile-my',name:'EAFC Mobile',cat:'Top-ups',fields:['player_id','player_name'],packs:[
     {n:'40 FC Points',u:0.51},{n:'100 FC Points',u:1.23},{n:'520 FC Points',u:5.95},{n:'1070 FC Points',u:11.18}
   ]},
-  {slug:'steam',name:'Steam',cat:'Top-ups',fields:['steam_login','phone'],packs:[
+  {slug:'steam',name:'Steam',cat:'Top-ups',fields:['steam_login'],packs:[
     {n:'Rechargement libre',u:1.00}
   ]},
-  {slug:'discord',name:'Discord',cat:'Cartes',fields:['discord_username','phone'],packs:[
+  {slug:'discord',name:'Discord',cat:'Cartes',fields:['discord_username'],packs:[
     {n:'Nitro Basic 1 mois',u:4.60},{n:'Nitro 1 mois',u:9.15},{n:'Nitro 1 an',u:90.47}
   ]},
-  {slug:'magic-chess-go-go-ru',name:'Magic Chess RU',cat:'Top-ups',fields:['player_id','server','player_name','phone'],packs:[
+  {slug:'magic-chess-go-go-ru',name:'Magic Chess RU',cat:'Top-ups',fields:['player_id','server','player_name'],packs:[
     {n:'55 Diamonds',u:1.01},{n:'275 Diamonds',u:5.04},{n:'565 Diamonds',u:10.13}
   ]},
-  {slug:'telegram-premium',name:'Telegram Premium',cat:'Telegram',fields:['telegram_username','phone'],packs:[
+  {slug:'telegram-premium',name:'Telegram Premium',cat:'Telegram',fields:['telegram_username'],packs:[
     {n:'3 mois',u:12.54},{n:'6 mois',u:16.72},{n:'12 mois',u:30.02}
   ]},
-  {slug:'telegram-stars',name:'Telegram Stars',cat:'Telegram',fields:['telegram_username','phone'],packs:[
+  {slug:'telegram-stars',name:'Telegram Stars',cat:'Telegram',fields:['telegram_username'],packs:[
     {n:'Stars',u:0.015637}
   ]},
-  {slug:'blood-strike-mena',name:'Blood Strike MENA',cat:'Top-ups',fields:['player_id','server','player_name','phone'],packs:[
+  {slug:'blood-strike-mena',name:'Blood Strike MENA',cat:'Top-ups',fields:['player_id','server','player_name'],packs:[
     {n:'51 GOLD',u:0.44},{n:'320 GOLD',u:2.68},{n:'1100 GOLD',u:8.95}
   ]},
-  {slug:'whiteout-survival',name:'Whiteout Survival',cat:'Top-ups',fields:['player_id','player_name','phone'],packs:[
+  {slug:'whiteout-survival',name:'Whiteout Survival',cat:'Top-ups',fields:['player_id','player_name'],packs:[
     {n:'99 Frost Stars',u:1.10},{n:'499 Frost Stars',u:5.40},{n:'999 Frost Stars',u:11.08}
   ]},
-  {slug:'magic-chess-go-go',name:'Magic Chess Global',cat:'Top-ups',fields:['player_id','server','player_name','phone'],packs:[
+  {slug:'magic-chess-go-go',name:'Magic Chess Global',cat:'Top-ups',fields:['player_id','server','player_name'],packs:[
     {n:'55 Diamonds',u:0.74},{n:'165 Diamonds',u:2.22},{n:'565 Diamonds',u:7.39}
   ]}
 ];
@@ -545,7 +557,6 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>'
 const minPrice = g => price(Math.min(...g.packs.map(p => p.u)));
 const LABELS = {player_id:'Player ID',player_name:'Nom du joueur',phone:'Téléphone',uid:'UID',server:'Serveur',roblox_username:'Pseudo Roblox',steam_login:'Login Steam',discord_username:'Pseudo Discord',telegram_username:'@username',email:'Email'};
 const EMOJIS = {'pubg-mobile':'🔫','free-fire':'🔥','delta-force':'🎯','mobile-legends':'⚔️','roblox':'🧱','minecraft':'⛏️','genshin-impact':'✨','arena-breakout':'💥','honkai-star-rail':'🚂','blood-strike':'🩸','eafc-mobile-my':'⚽','steam':'🎮','discord':'💬','magic-chess-go-go-ru':'♟️','telegram-premium':'✈️','telegram-stars':'⭐','blood-strike-mena':'🩸','whiteout-survival':'❄️','magic-chess-go-go':'♟️'};
-/* couleur d'accent par jeu (présentation uniquement) */
 const COLORS = {'pubg-mobile':['#F59E0B','#B45309'],'free-fire':['#F97316','#DC2626'],'delta-force':['#10B981','#047857'],'mobile-legends':['#3B82F6','#1D4ED8'],'roblox':['#EF4444','#991B1B'],'minecraft':['#22C55E','#15803D'],'genshin-impact':['#38BDF8','#6366F1'],'arena-breakout':['#84CC16','#4D7C0F'],'honkai-star-rail':['#A78BFA','#6D28D9'],'blood-strike':['#F43F5E','#9F1239'],'eafc-mobile-my':['#14B8A6','#0F766E'],'steam':['#60A5FA','#1E3A8A'],'discord':['#818CF8','#4338CA'],'magic-chess-go-go-ru':['#E879F9','#A21CAF'],'telegram-premium':['#38BDF8','#0369A1'],'telegram-stars':['#FBBF24','#B45309'],'blood-strike-mena':['#FB7185','#9F1239'],'whiteout-survival':['#67E8F9','#0E7490'],'magic-chess-go-go':['#C084FC','#7E22CE']};
 const colors = s => COLORS[s] || ['#8B5CF6','#5B21B6'];
 const cssVars = s => { const [a,b] = colors(s); return `--c1:${a};--c2:${b}`; };
@@ -648,8 +659,9 @@ function ouvrirJeu(slug) {
       <div class="pack-n"><img src="images/monnaie-${slug}.png" alt="" onerror="this.remove()">${esc(p.n)}</div>
       <div class="pack-p">${fmt(price(p.u))}</div>
     </button>`).join('');
-  $('fields').innerHTML = game.fields.filter(f => f !== 'phone').map(f => `
+  $('fields').innerHTML = game.fields.map(f => `
     <div class="field"><label>${LABELS[f] || f}</label><input type="text" name="${f}" autocomplete="off"></div>`).join('');
+  $('refTransaction').value = '';
   $('gameErr').classList.remove('show');
   refreshSummary();
   go('jeu');
@@ -677,6 +689,8 @@ function addFromGame(buyNow) {
     }
     fields[inp.name] = inp.value.trim();
   }
+  const refTransac = $('refTransaction')?.value.trim() || '';
+  if (refTransac) fields.reference_transaction = refTransac;
   const p = G.packs[gPack];
   const ex = cart.find(i => i.slug === G.slug && i.pack === p.n && JSON.stringify(i.fields) === JSON.stringify(fields));
   if (ex) ex.qty = Math.min(5000, ex.qty + gQty);
@@ -706,7 +720,7 @@ function renderCart() {
   if (orderDone) {
     $('cartFoot').style.display = 'none';
     $('cartBody').innerHTML = `<div class="done-box"><div class="ok">✓</div><h3>Commande envoyée !</h3>
-      <p>Merci ! Nous vous contacterons très bientôt au <b>${esc(orderDone)}</b> pour finaliser la recharge.</p>
+      <p>Merci ! Nous vous contacterons très bientôt${orderDone !== 'votre compte' ? ` au <b>${esc(orderDone)}</b>` : ''} pour finaliser la recharge.</p>
       <button class="btn block" onclick="orderDone=null;closeCart();go('accueil')">Retour à l'accueil</button>
       <button class="btn ghost block" style="margin-top:10px;" onclick="orderDone=null;closeCart();go('suivi')">Suivre ma commande</button></div>`;
     return;
@@ -737,24 +751,33 @@ async function validate() {
   const errEl = $('cartError'); errEl.classList.remove('show');
   if (!cart.length) return;
   const phone = $('cartPhone').value.trim();
-  if (phone.replace(/\D/g, '').length < 8) { errEl.textContent = 'Entrez un numéro de téléphone valide.'; errEl.classList.add('show'); $('cartPhone').focus(); return; }
-  safeSet('nx-phone', phone);
+  if (phone && phone.replace(/\D/g, '').length < 8) {
+    errEl.textContent = 'Le numéro de téléphone semble invalide (ou laissez-le vide).';
+    errEl.classList.add('show'); $('cartPhone').focus(); return;
+  }
+  if (phone) safeSet('nx-phone', phone);
   const btn = $('validateBtn'); btn.disabled = true; btn.textContent = 'Envoi en cours…';
-  const rows = cart.map(i => { const f = i.fields; return {
-    jeu: i.game,
-    pack: i.qty > 1 ? `${i.pack} ×${i.qty}` : i.pack,
-    prix_ar: i.unit * i.qty,
-    player_id: f.player_id || f.uid || f.roblox_username || f.telegram_username || f.steam_login || f.email || '',
-    nom_joueur: f.player_name || f.discord_username || '',
-    telephone: phone
-  }; });
+  const rows = cart.map(i => {
+    const f = i.fields;
+    return {
+      jeu: i.game,
+      pack: i.qty > 1 ? `${i.pack} ×${i.qty}` : i.pack,
+      prix_ar: i.unit * i.qty,
+      player_id: f.player_id || f.uid || f.roblox_username || f.telegram_username || f.steam_login || f.email || '',
+      nom_joueur: f.player_name || f.discord_username || '',
+      telephone: phone || null,
+      reference_transaction: f.reference_transaction || null
+    };
+  });
   try {
     const { error } = await db.from('commandes').insert(rows);
     if (error) throw error;
-    cart = []; saveCart(); orderDone = phone; renderCart();
+    cart = []; saveCart(); orderDone = phone || 'votre compte'; renderCart();
   } catch (err) {
     errEl.textContent = 'Erreur : ' + (err.message || 'réessayez'); errEl.classList.add('show');
-  } finally { btn.disabled = false; btn.textContent = 'Valider la commande'; }
+  } finally {
+    btn.disabled = false; btn.textContent = 'Valider la commande';
+  }
 }
 
 /* ================= Suivi ================= */
@@ -771,6 +794,7 @@ async function track() {
       res.innerHTML = `<div class="tr-card"><div class="tr-top"><strong style="font-family:var(--font-d);font-size:1.2rem;">Commande n°${esc(id)}</strong><span class="status ${cls}">${esc(st)}</span></div>
         <div class="sum-row"><span>Jeu</span><b>${esc(c.jeu || '—')}</b></div>
         <div class="sum-row"><span>Pack</span><b>${esc(c.pack || '—')}</b></div>
+        ${c.reference_transaction ? `<div class="sum-row"><span>Référence</span><b>${esc(c.reference_transaction)}</b></div>` : ''}
         <div class="sum-total"><span>Montant</span><b>${fmt(Number(c.prix_ar) || 0)}</b></div></div>`;
     } else res.innerHTML = '<div class="err show">Commande introuvable. Vérifiez le numéro.</div>';
   } catch { res.innerHTML = '<div class="err show">Erreur de connexion. Réessayez.</div>'; }
