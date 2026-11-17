@@ -189,10 +189,33 @@ details p { color: var(--muted); margin-top: 10px; font-size: .92rem; }
 
 .game-layout { display: grid; grid-template-columns: 1fr 380px; gap: 26px; align-items: start; }
 .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 26px; padding: 26px; backdrop-filter: blur(18px); margin-bottom: 20px; }
+.tip { background: color-mix(in srgb, var(--ac2) 10%, transparent); border: 1px solid color-mix(in srgb, var(--ac2) 30%, transparent); border-radius: 14px; padding: 12px 15px; font-size: .88rem; line-height: 1.55; margin: -4px 0 18px; color: var(--muted); }
+.tip b { color: var(--text); }
+.pack-act { margin-top: 12px; }
+.pack-act .add { width: 100%; padding: 11px 10px; border-radius: 12px; border: none; background: var(--brand); color: #fff; font-weight: 800; font-size: .84rem; cursor: pointer; transition: .2s; box-shadow: 0 6px 18px rgba(139,92,246,.4); }
+.pack-act .add:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(139,92,246,.55); }
+.pack-act .qty { width: 100%; justify-content: space-between; }
+.pack-act .qty input { flex: 1; width: auto; min-width: 0; }
+.pack-act .qty button { width: 40px; height: 36px; }
+.incart { display: block; font-size: .72rem; color: #4ade80; font-weight: 700; margin-top: 7px; text-align: center; }
+[data-theme="light"] .incart { color: #15803d; }
+.stepbar { display: flex; align-items: center; gap: 8px; font-size: .72rem; font-weight: 700; color: var(--muted); padding: 11px 24px; border-bottom: 1px solid var(--line); position: relative; flex-wrap: wrap; }
+.stepbar.flat { padding: 0; border: none; font-size: .8rem; }
+.stepbar b.on { color: var(--ac2); }
+.cartbar { position: fixed; left: 50%; bottom: 20px; transform: translate(-50%, 140%); width: min(560px, calc(100% - 28px)); z-index: 80; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 16px; border-radius: 20px; background: var(--brand); color: #fff; cursor: pointer; box-shadow: 0 18px 50px rgba(109,40,217,.6), inset 0 1px 0 rgba(255,255,255,.3); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+.cartbar.show { transform: translate(-50%, 0); }
+.cartbar.pulse { animation: cbp .5s; }
+@keyframes cbp { 40% { transform: translate(-50%, -8px) scale(1.03); } }
+.cb-l { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.cb-ic { position: relative; font-size: 1.5rem; }
+.cb-ic i { position: absolute; top: -8px; right: -10px; min-width: 19px; height: 19px; padding: 0 4px; border-radius: 10px; background: #f43f5e; font-style: normal; font-size: .66rem; font-weight: 800; display: grid; place-items: center; }
+.cb-l strong { display: block; font-size: .9rem; line-height: 1.2; }
+.cb-l small { font-size: .78rem; opacity: .9; font-weight: 700; }
+.cb-go { background: #fff; color: #4c1d95; font-weight: 800; font-size: .86rem; padding: 12px 18px; border-radius: 14px; white-space: nowrap; }
 .panel h3 { font-family: var(--font-d); font-size: 1.15rem; letter-spacing: -.3px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
 .panel h3 i { font-style: normal; width: 28px; height: 28px; border-radius: 9px; background: var(--brand); color: #fff; display: grid; place-items: center; font-size: .82rem; font-weight: 800; }
 .packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
-.pack { position: relative; text-align: left; padding: 16px; border-radius: 18px; border: 1.5px solid var(--line); background: var(--surface-2); cursor: pointer; transition: .25s; color: var(--text); }
+.pack { position: relative; text-align: left; padding: 16px; border-radius: 18px; border: 1.5px solid var(--line); background: var(--surface-2); transition: .25s; color: var(--text); }
 .pack:hover { border-color: color-mix(in srgb, var(--ac) 65%, transparent); transform: translateY(-3px); }
 .pack.sel { border-color: var(--ac); background: color-mix(in srgb, var(--ac) 16%, transparent); box-shadow: 0 10px 30px color-mix(in srgb, var(--ac) 28%, transparent); }
 .pack.sel::after { content: '✓'; position: absolute; top: 10px; right: 10px; width: 22px; height: 22px; border-radius: 50%; background: var(--ac); color: #fff; font-size: .72rem; font-weight: 800; display: grid; place-items: center; }
@@ -302,7 +325,7 @@ details p { color: var(--muted); margin-top: 10px; font-size: .92rem; }
 .free { font-size: .75rem; text-align: center; margin-top: 12px; color: var(--muted); font-weight: 600; }
 
 /* ===== TOAST / FOOTER / MOBILE NAV ===== */
-.toasts { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 300; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; }
+.toasts { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); z-index: 300; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; }
 .toast { padding: 13px 22px; border-radius: 14px; font-weight: 700; font-size: .9rem; color: #fff; background: #1a1635; border: 1px solid rgba(167,139,250,.4); box-shadow: 0 14px 44px rgba(0,0,0,.5); animation: tin .4s cubic-bezier(.2,.8,.2,1); max-width: 92vw; text-align: center; }
 .toast.ok { border-color: rgba(34,197,94,.55); }
 @keyframes tin { from { opacity: 0; transform: translateY(20px) scale(.95); } }
@@ -336,7 +359,8 @@ footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-f
   .mnav a.active { color: var(--text); background: var(--surface-2); }
   .mnav .badge { top: 0; right: calc(50% - 22px); }
   body { padding-bottom: 72px; }
-  .toasts { bottom: 90px; }
+  .toasts { bottom: 160px; }
+  .cartbar { bottom: calc(78px + env(safe-area-inset-bottom)); }
   .sec-head h2, h1.title { font-size: 1.6rem; }
   .track-form { flex-direction: column; }
 }
@@ -431,30 +455,10 @@ footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-f
           <div class="badges"><span class="mini">⚡ Livraison rapide</span><span class="mini">🔒 Sans mot de passe</span><span class="mini">💬 Support 7j/7</span></div>
         </div>
       </div>
-      <div class="game-layout">
-        <div>
-          <div class="panel"><h3><i>1</i> Choisissez votre pack</h3><div class="packs" id="packs"></div></div>
-          <div class="panel"><h3><i>2</i> Ajoutez au panier</h3>
-            <p class="hint" style="margin-top:0;font-size:.9rem;line-height:1.6;">Sélectionnez votre pack puis ajoutez-le au panier. Votre <b>ID de joueur</b> et la <b>référence de transaction</b> vous seront demandés dans le panier, au moment de valider.</p>
-          </div>
-        </div>
-        <aside class="summary">
-          <div class="panel">
-            <h3>Récapitulatif</h3>
-            <div class="err" id="gameErr"></div>
-            <div class="sum-row"><span>Jeu</span><b id="sumGame">—</b></div>
-            <div class="sum-row"><span>Pack</span><b id="sumPack">Aucun</b></div>
-            <div class="sum-row"><span>Prix unitaire</span><b id="sumUnit">—</b></div>
-            <div class="sum-row"><span>Quantité</span>
-              <div class="qty"><button onclick="gqty(-1)">−</button><input id="gQty" type="number" value="1" min="1" onchange="gqtySet(this.value)"><button onclick="gqty(1)">+</button></div>
-            </div>
-            <div class="sum-total"><span>Total</span><b id="sumTotal">0 Ar</b></div>
-            <div class="sum-actions">
-              <button class="btn acc block" onclick="addFromGame(true)">⚡ Acheter maintenant</button>
-              <button class="btn ghost block" onclick="addFromGame(false)">🛒 Ajouter au panier</button>
-            </div>
-          </div>
-        </aside>
+      <div class="panel">
+        <h3>Choisissez votre pack</h3>
+        <p class="tip">👆 Touchez <b>« Ajouter au panier »</b> sur le pack voulu. Votre <b>ID de joueur</b> vous sera demandé juste après, dans le panier.</p>
+        <div class="packs" id="packs"></div>
       </div>
     </div>
   </section>
@@ -463,7 +467,8 @@ footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-f
   <section id="p-paiement" class="page">
     <div class="wrap">
       <div class="crumbs"><a onclick="openCart()">← Retour au panier</a></div>
-      <h1 class="title" style="margin-bottom:24px;">Paiement</h1>
+      <div class="stepbar flat"><b>① Panier & ID</b><span>›</span><b class="on">② Paiement</b><span>›</span><b>③ Confirmation</b></div>
+      <h1 class="title" style="margin:18px 0 24px;">Paiement</h1>
       <div id="payDone" style="display:none;"></div>
       <div class="game-layout" id="payMain">
         <div>
@@ -525,6 +530,7 @@ footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-f
 <div id="overlay" class="overlay" onclick="closeCart()"></div>
 <aside id="drawer" class="drawer" aria-label="Panier">
   <div class="d-head"><h2>Mon panier <span class="pillc" id="cartCount">0</span></h2><button class="x" onclick="closeCart()" aria-label="Fermer">✕</button></div>
+  <div class="stepbar"><b class="on">① Panier & ID</b><span>›</span><b>② Paiement</b><span>›</span><b>③ Confirmation</b></div>
   <div class="d-body" id="cartBody"></div>
   <div class="d-foot" id="cartFoot">
     <div class="err" id="cartError"></div>
@@ -535,6 +541,10 @@ footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-f
     <div class="free">💳 Mobile Money ou Crypto à l'étape suivante</div>
   </div>
 </aside>
+<div class="cartbar" id="cartbar" onclick="openCart()" role="button" aria-label="Voir le panier">
+  <div class="cb-l"><span class="cb-ic">🛒<i id="cbN">0</i></span><div><strong id="cbTxt">0 article</strong><small id="cbTot">0 Ar</small></div></div>
+  <span class="cb-go">Voir le panier →</span>
+</div>
 <div class="toasts" id="toasts"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -647,6 +657,7 @@ function go(page) {
   $('p-' + page).classList.add('active');
   document.querySelectorAll('[data-p]').forEach(a => a.classList.toggle('active', a.dataset.p === page));
   window.scrollTo({ top: 0 });
+  updateBar();
 }
 
 /* ================= Accueil ================= */
@@ -696,54 +707,51 @@ document.addEventListener('keydown', e => {
 });
 
 /* ================= Page jeu ================= */
-let G = null, gPack = null, gQty = 1;
-const qtyMax = () => G.slug === 'telegram-stars' ? 5000 : G.slug === 'steam' ? 100 : 20;
+let G = null;
+const stepFor = s => s === 'telegram-stars' ? 50 : 1;
+const maxQty = s => s === 'telegram-stars' ? 5000 : s === 'steam' ? 100 : 20;
+const findItem = (slug, pack) => cart.find(i => i.slug === slug && i.pack === pack);
 
 function ouvrirJeu(slug) {
   const game = DATA.find(g => g.slug === slug); if (!game) return;
-  G = game; gPack = game.packs.length === 1 ? 0 : null; gQty = 1;
+  G = game;
   const [c1, c2] = colors(slug);
   $('p-jeu').style.setProperty('--ac', c1); $('p-jeu').style.setProperty('--ac2', c2);
   $('crumbName').textContent = game.name;
   $('gameTitle').textContent = game.name;
   $('gameSub').textContent = `${game.packs.length} pack${game.packs.length > 1 ? 's' : ''} · ${game.cat} · dès ${fmt(minPrice(game))}`;
   $('bannerTile').innerHTML = tile(slug, 'xl');
-  const hot = game.packs.length >= 4 ? 2 : -1;
-  $('packs').innerHTML = game.packs.map((p, i) => `
-    <button class="pack" data-i="${i}" onclick="selectPack(${i})">
-      ${i === hot ? '<span class="pack-hot">Populaire</span>' : ''}
-      <div class="pack-n"><img src="images/monnaie-${slug}.png" alt="" onerror="this.remove()">${esc(p.n)}</div>
-      <div class="pack-p">${fmt(price(p.u))}</div>
-    </button>`).join('');
-  $('gameErr').classList.remove('show');
-  refreshSummary();
+  renderPacks();
   go('jeu');
 }
-function selectPack(i) { gPack = i; refreshSummary(); }
-function gqty(d) { gqtySet(gQty + d); }
-function gqtySet(v) { gQty = Math.max(1, Math.min(qtyMax(), parseInt(v) || 1)); refreshSummary(); }
-function refreshSummary() {
-  document.querySelectorAll('#packs .pack').forEach(el => el.classList.toggle('sel', +el.dataset.i === gPack));
-  $('sumGame').textContent = G.name;
-  $('gQty').value = gQty; $('gQty').max = qtyMax();
-  if (gPack === null) { $('sumPack').textContent = 'Aucun'; $('sumUnit').textContent = '—'; $('sumTotal').textContent = fmt(0); return; }
-  const p = G.packs[gPack], u = price(p.u);
-  $('sumPack').textContent = p.n; $('sumUnit').textContent = fmt(u); $('sumTotal').textContent = fmt(u * gQty);
+function renderPacks() {
+  if (!G) return;
+  const hot = G.packs.length >= 4 ? 2 : -1;
+  $('packs').innerHTML = G.packs.map((p, i) => {
+    const it = findItem(G.slug, p.n);
+    const act = it
+      ? `<div class="pack-act"><div class="qty"><button onclick="packQty(${i},-1)" aria-label="Moins">−</button><input value="${it.qty}" readonly><button onclick="packQty(${i},1)" aria-label="Plus">+</button></div><span class="incart">✓ Dans le panier · ${fmt(it.unit * it.qty)}</span></div>`
+      : `<div class="pack-act"><button class="add" onclick="addPack(${i})">＋ Ajouter au panier</button></div>`;
+    return `<div class="pack ${it ? 'sel' : ''}">
+      ${i === hot ? '<span class="pack-hot">Populaire</span>' : ''}
+      <div class="pack-n"><img src="images/monnaie-${G.slug}.png" alt="" onerror="this.remove()">${esc(p.n)}</div>
+      <div class="pack-p">${fmt(price(p.u))}</div>${act}</div>`;
+  }).join('');
 }
-function addFromGame(buyNow) {
-  const err = $('gameErr'); err.classList.remove('show');
-  if (gPack === null) { err.textContent = 'Choisissez d\'abord un pack.'; err.classList.add('show'); return; }
-  const p = G.packs[gPack];
-  const ex = cart.find(i => i.slug === G.slug && i.pack === p.n);
-  if (ex) ex.qty = Math.min(5000, ex.qty + gQty);
-  else {
-    /* champs demandés dans le panier (sans téléphone), pré-remplis avec la dernière saisie */
-    let saved = {}; try { saved = JSON.parse(safeGet('nx-f-' + G.slug, '{}')) || {}; } catch {}
-    const fields = {}; G.fields.filter(f => f !== 'phone').forEach(f => fields[f] = saved[f] || '');
-    cart.push({ id: uid(), slug: G.slug, game: G.name, pack: p.n, unit: price(p.u), qty: gQty, fields });
-  }
-  saveCart(); renderCart(); bump();
-  if (buyNow) openCart(); else toast('✅ Ajouté au panier');
+function addPack(i) {
+  const p = G.packs[i];
+  /* champs demandés dans le panier (sans téléphone), pré-remplis avec la dernière saisie */
+  let saved = {}; try { saved = JSON.parse(safeGet('nx-f-' + G.slug, '{}')) || {}; } catch {}
+  const fields = {}; G.fields.filter(f => f !== 'phone').forEach(f => fields[f] = saved[f] || '');
+  cart.push({ id: uid(), slug: G.slug, game: G.name, pack: p.n, unit: price(p.u), qty: stepFor(G.slug), fields });
+  saveCart(); renderCart(); bump(); toast('✅ Ajouté au panier');
+}
+function packQty(i, d) {
+  const it = findItem(G.slug, G.packs[i].n); if (!it) return;
+  const st = stepFor(it.slug), q = it.qty + d * st;
+  if (q < st) { cart = cart.filter(x => x.id !== it.id); }
+  else it.qty = Math.min(maxQty(it.slug), q);
+  saveCart(); renderCart();
 }
 
 /* ================= Panier ================= */
@@ -751,9 +759,18 @@ let cart = [];
 try { cart = JSON.parse(safeGet('nx-cart', '[]')) || []; } catch { cart = []; }
 let payMethod = null, orderPhone = '';
 const saveCart = () => safeSet('nx-cart', JSON.stringify(cart));
-function bump() { ['badge','badge2'].forEach(id => { const b = $(id); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }); }
+function updateBar() {
+  const n = cart.reduce((s, i) => s + i.qty, 0), pg = document.querySelector('.page.active');
+  const open = $('drawer').classList.contains('open');
+  $('cbN').textContent = cart.length;
+  $('cbTxt').textContent = cart.length + ' article' + (cart.length > 1 ? 's' : '') + ' dans le panier';
+  $('cbTot').textContent = 'Total : ' + fmt(cartTotal());
+  $('cartbar').classList.toggle('show', cart.length > 0 && !open && !(pg && pg.id === 'p-paiement'));
+}
+function bump() { const cb = $('cartbar'); cb.classList.remove('pulse'); void cb.offsetWidth; cb.classList.add('pulse'); ['badge','badge2'].forEach(id => { const b = $(id); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }); }
 
-function changeQty(id, d) { const it = cart.find(i => i.id === id); if (!it) return; it.qty = Math.max(1, Math.min(5000, it.qty + d)); saveCart(); renderCart(); }
+function changeQty(id, d) { const it = cart.find(i => i.id === id); if (!it) return; const st = stepFor(it.slug); it.qty = Math.max(st, Math.min(maxQty(it.slug), it.qty + d * st)); saveCart(); renderCart(); }
+function setQty(id, v) { const it = cart.find(i => i.id === id); if (!it) return; const st = stepFor(it.slug); it.qty = Math.max(st, Math.min(maxQty(it.slug), parseInt(v) || st)); saveCart(); renderCart(); }
 function setField(id, k, v) {
   const it = cart.find(i => i.id === id); if (!it) return;
   it.fields[k] = v; saveCart();
@@ -770,6 +787,7 @@ function renderCart() {
   $('cartCount').textContent = cart.length; $('subCount').textContent = count; $('cartTotal').textContent = fmt(total);
 
   $('cartFoot').style.display = cart.length ? '' : 'none';
+  renderPacks(); updateBar();
   if (!cart.length) {
     $('cartBody').innerHTML = `<div class="empty"><div class="big">🛒</div><p>Votre panier est vide.</p>
       <button class="btn" onclick="closeCart();go('catalogue')">Parcourir le catalogue</button></div>`;
@@ -779,16 +797,17 @@ function renderCart() {
     const inputs = Object.keys(i.fields).map(k => `<div><label>${LABELS[k] || k} *</label><input type="text" value="${esc(i.fields[k])}" data-item="${i.id}" data-k="${k}" oninput="setField('${i.id}','${k}',this.value);this.classList.remove('bad')" autocomplete="off"></div>`).join('');
     return `<div class="ci" style="${cssVars(i.slug).replace('--c1','--ac').replace('--c2','--ac2')}">${tile(i.slug, 'sm')}
       <div class="ci-main"><strong>${esc(i.game)}</strong><div class="ci-pack">${esc(i.pack)}</div><div class="ci-fields">${inputs}</div>
-        <div class="ci-bot"><div class="qty"><button onclick="changeQty('${i.id}',-1)">−</button><input value="${i.qty}" readonly><button onclick="changeQty('${i.id}',1)">+</button></div>
+        <div class="ci-bot"><div class="qty"><button onclick="changeQty('${i.id}',-1)">−</button><input type="number" inputmode="numeric" value="${i.qty}" onchange="setQty('${i.id}',this.value)"><button onclick="changeQty('${i.id}',1)">+</button></div>
         <div class="ci-price">${fmt(i.unit * i.qty)}</div></div></div>
       <button class="ci-del" onclick="removeItem('${i.id}')" aria-label="Supprimer">✕</button></div>`;
   }).join('');
 }
 function openCart() {
   renderCart(); $('cartError').classList.remove('show');
-  $('drawer').classList.add('open'); $('overlay').classList.add('open'); document.body.style.overflow = 'hidden';
+  $('drawer').classList.add('open'); $('overlay').classList.add('open'); document.body.style.overflow = 'hidden'; updateBar();
+  if (window.matchMedia('(hover:hover)').matches) setTimeout(() => { const e = [...document.querySelectorAll('#cartBody .ci-fields input')].find(x => !x.value.trim()); if (e) e.focus(); }, 450);
 }
-function closeCart() { $('drawer').classList.remove('open'); $('overlay').classList.remove('open'); document.body.style.overflow = ''; }
+function closeCart() { $('drawer').classList.remove('open'); $('overlay').classList.remove('open'); document.body.style.overflow = ''; updateBar(); }
 
 /* ================= Paiement ================= */
 /* >>> MODIFIEZ ICI vos vrais numéros / identifiants de paiement <<< */
@@ -816,12 +835,12 @@ function copyText(t, btn) {
 function toPayment() {
   const errEl = $('cartError'); errEl.classList.remove('show');
   if (!cart.length) return;
-  for (const inp of document.querySelectorAll('#cartBody .ci-fields input')) {
-    if (!inp.value.trim()) {
-      const lab = inp.previousElementSibling.textContent.replace(' *', '');
-      errEl.textContent = `Remplissez « ${lab} » pour ${cart.find(i => i.id === inp.dataset.item)?.game || 'cet article'}.`;
-      errEl.classList.add('show'); inp.classList.add('bad'); inp.focus(); return;
-    }
+  const missing = [...document.querySelectorAll('#cartBody .ci-fields input')].filter(x => !x.value.trim());
+  if (missing.length) {
+    missing.forEach(x => x.classList.add('bad'));
+    const f = missing[0], lab = f.previousElementSibling.textContent.replace(' *', '');
+    errEl.textContent = `Il manque ${missing.length > 1 ? missing.length + ' informations' : 'une information'} : « ${lab} » pour ${cart.find(i => i.id === f.dataset.item)?.game || 'cet article'}.`;
+    errEl.classList.add('show'); f.scrollIntoView({ block: 'center', behavior: 'smooth' }); f.focus(); return;
   }
   closeCart(); renderPayment(); go('paiement');
 }
