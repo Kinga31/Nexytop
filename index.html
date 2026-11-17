@@ -260,6 +260,32 @@ details p { color: var(--muted); margin-top: 10px; font-size: .92rem; }
 .ci-price { font-weight: 800; font-family: var(--font-d); }
 .ci-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; align-self: flex-start; transition: .2s; padding: 2px 4px; }
 .ci-del:hover { color: #f43f5e; transform: scale(1.2); }
+.pm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.pm { position: relative; display: flex; align-items: center; gap: 14px; text-align: left; padding: 16px; border-radius: 18px; border: 1.5px solid var(--line); background: var(--surface-2); color: var(--text); cursor: pointer; transition: .25s; }
+.pm:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--pc) 70%, transparent); }
+.pm.sel { border-color: var(--pc); background: color-mix(in srgb, var(--pc) 15%, transparent); box-shadow: 0 10px 30px color-mix(in srgb, var(--pc) 28%, transparent); }
+.pm.sel::after { content: '✓'; position: absolute; top: 9px; right: 10px; width: 21px; height: 21px; border-radius: 50%; background: var(--pc); color: #111; font-size: .7rem; font-weight: 800; display: grid; place-items: center; }
+.pm .pe { width: 46px; height: 46px; flex-shrink: 0; border-radius: 14px; display: grid; place-items: center; font-size: 1.5rem; background: color-mix(in srgb, var(--pc) 22%, transparent); }
+.pm strong { display: block; font-family: var(--font-d); font-size: 1rem; line-height: 1.2; }
+.pm small { color: var(--muted); font-size: .74rem; font-weight: 600; }
+.dial { text-decoration: none; margin: 4px 0 12px; }
+.ussd-code { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: .82rem; color: var(--muted); font-weight: 600; margin-bottom: 14px; }
+.ussd-code code { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--text); background: var(--surface-2); border: 1px solid var(--line); padding: 5px 10px; border-radius: 9px; font-size: .84rem; word-break: break-all; }
+.instr { border-radius: 18px; border: 1px solid var(--line); background: var(--surface-2); padding: 6px 18px; margin-bottom: 16px; }
+.irow { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px dashed var(--line); font-size: .9rem; }
+.irow:last-child { border-bottom: none; }
+.irow span { color: var(--muted); font-weight: 600; }
+.irow b { font-family: var(--font-d); font-size: 1.05rem; text-align: right; word-break: break-all; }
+.copy { margin-left: 10px; padding: 6px 11px; border-radius: 9px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-size: .74rem; font-weight: 700; cursor: pointer; transition: .2s; flex-shrink: 0; }
+.copy:hover { border-color: var(--ac); }
+.istep { margin: 0; padding-left: 20px; color: var(--muted); font-size: .9rem; line-height: 1.8; }
+.istep b { color: var(--text); }
+.ps-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.ps-item:last-child { border-bottom: none; }
+.ps-item div { flex: 1; min-width: 0; font-size: .88rem; }
+.ps-item strong { display: block; font-size: .92rem; }
+.ps-item small { color: var(--muted); font-weight: 600; word-break: break-word; }
+.ps-item b { font-family: var(--font-d); white-space: nowrap; font-size: .92rem; }
 .ci-fields { display: grid; gap: 8px; margin-top: 10px; }
 .ci-fields label { display: block; font-size: .7rem; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
 .ci-fields input { width: 100%; padding: 10px 12px; border-radius: 11px; border: 1.5px solid var(--line); background: var(--surface-2); color: var(--text); font-size: .9rem; transition: .2s; }
@@ -433,6 +459,41 @@ footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-f
     </div>
   </section>
 
+  <!-- PAIEMENT -->
+  <section id="p-paiement" class="page">
+    <div class="wrap">
+      <div class="crumbs"><a onclick="openCart()">← Retour au panier</a></div>
+      <h1 class="title" style="margin-bottom:24px;">Paiement</h1>
+      <div id="payDone" style="display:none;"></div>
+      <div class="game-layout" id="payMain">
+        <div>
+          <div class="panel"><h3><i>1</i> Choisissez votre mode de paiement</h3><div class="pm-grid" id="payMethods"></div></div>
+          <div class="panel" id="payInstrPanel" style="display:none;"><h3><i>2</i> Effectuez le paiement</h3><div id="payInstr"></div></div>
+          <div class="panel" id="payConfirm" style="display:none;"><h3><i>3</i> Confirmez votre paiement</h3>
+            <div class="err" id="payError"></div>
+            <div class="fields">
+              <div class="field"><label>Référence de la transaction *</label><input type="text" id="payRef" placeholder="ex. MP240101.1234.A12345" autocomplete="off" oninput="this.classList.remove('bad')"></div>
+              <div class="field"><label>Téléphone <span style="font-weight:500;opacity:.8;">(optionnel)</span></label><input type="tel" id="payPhone" placeholder="034 00 000 00" autocomplete="tel" oninput="this.classList.remove('bad')"></div>
+            </div>
+            <p class="hint">💡 La référence se trouve dans le SMS de confirmation (ou l'historique Binance). Elle nous permet de vérifier votre paiement.</p>
+          </div>
+        </div>
+        <aside class="summary">
+          <div class="panel">
+            <h3>Votre commande</h3>
+            <div id="paySummary"></div>
+            <div class="sum-total"><span>Total</span><b id="payTotal">0 Ar</b></div>
+            <div id="payCrypto" class="hint" style="display:none;"></div>
+            <div class="sum-actions">
+              <button class="btn block" id="payBtn" onclick="confirmOrder()" disabled>Confirmer la commande</button>
+              <button class="btn ghost block" onclick="openCart()">Modifier le panier</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
   <!-- SUIVI -->
   <section id="p-suivi" class="page">
     <div class="wrap">
@@ -466,14 +527,12 @@ footer { border-top: 1px solid var(--line); background: var(--glass); backdrop-f
   <div class="d-head"><h2>Mon panier <span class="pillc" id="cartCount">0</span></h2><button class="x" onclick="closeCart()" aria-label="Fermer">✕</button></div>
   <div class="d-body" id="cartBody"></div>
   <div class="d-foot" id="cartFoot">
-    <div class="field" style="margin-bottom:12px;"><label>Référence de la transaction *</label><input type="text" id="cartRef" placeholder="ex. MP240101.1234.A12345" autocomplete="off"></div>
-    <div class="field" style="margin-bottom:14px;"><label>Téléphone <span style="font-weight:500;opacity:.8;">(optionnel)</span></label><input type="tel" id="cartPhone" placeholder="034 00 000 00" autocomplete="tel"></div>
     <div class="err" id="cartError"></div>
     <div class="sum-row" style="padding:4px 0;"><span>Articles</span><b id="subCount">0</b></div>
     <div class="sum-total" style="margin-bottom:16px;"><span>Total</span><b id="cartTotal">0 Ar</b></div>
-    <button class="btn block" id="validateBtn" onclick="validate()">Valider la commande</button>
+    <button class="btn block" onclick="toPayment()">Passer au paiement →</button>
     <button class="btn ghost block" style="margin-top:10px;" onclick="clearCart()">Vider le panier</button>
-    <div class="free">🔒 Aucun mot de passe demandé · Support 7j/7</div>
+    <div class="free">💳 Mobile Money ou Crypto à l'étape suivante</div>
   </div>
 </aside>
 <div class="toasts" id="toasts"></div>
@@ -690,7 +749,7 @@ function addFromGame(buyNow) {
 /* ================= Panier ================= */
 let cart = [];
 try { cart = JSON.parse(safeGet('nx-cart', '[]')) || []; } catch { cart = []; }
-let orderDone = null;
+let payMethod = null, orderPhone = '';
 const saveCart = () => safeSet('nx-cart', JSON.stringify(cart));
 function bump() { ['badge','badge2'].forEach(id => { const b = $(id); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }); }
 
@@ -710,14 +769,6 @@ function renderCart() {
   $('hdTotal').textContent = cart.length ? fmt(total) : 'Panier';
   $('cartCount').textContent = cart.length; $('subCount').textContent = count; $('cartTotal').textContent = fmt(total);
 
-  if (orderDone) {
-    $('cartFoot').style.display = 'none';
-    $('cartBody').innerHTML = `<div class="done-box"><div class="ok">✓</div><h3>Commande envoyée !</h3>
-      <p>Merci ! Nous vérifions votre paiement et traitons votre recharge très rapidement${orderDone.trim() ? `. Nous pourrons vous joindre au <b>${esc(orderDone)}</b>` : ''}.</p>
-      <button class="btn block" onclick="orderDone=null;closeCart();go('accueil')">Retour à l'accueil</button>
-      <button class="btn ghost block" style="margin-top:10px;" onclick="orderDone=null;closeCart();go('suivi')">Suivre ma commande</button></div>`;
-    return;
-  }
   $('cartFoot').style.display = cart.length ? '' : 'none';
   if (!cart.length) {
     $('cartBody').innerHTML = `<div class="empty"><div class="big">🛒</div><p>Votre panier est vide.</p>
@@ -734,28 +785,114 @@ function renderCart() {
   }).join('');
 }
 function openCart() {
-  renderCart(); $('cartPhone').value = safeGet('nx-phone', ''); $('cartError').classList.remove('show');
+  renderCart(); $('cartError').classList.remove('show');
   $('drawer').classList.add('open'); $('overlay').classList.add('open'); document.body.style.overflow = 'hidden';
 }
-function closeCart() { $('drawer').classList.remove('open'); $('overlay').classList.remove('open'); document.body.style.overflow = ''; if (orderDone) { orderDone = null; renderCart(); } }
+function closeCart() { $('drawer').classList.remove('open'); $('overlay').classList.remove('open'); document.body.style.overflow = ''; }
 
-/* ================= Validation (Supabase) ================= */
-async function validate() {
+/* ================= Paiement ================= */
+/* >>> MODIFIEZ ICI vos vrais numéros / identifiants de paiement <<< */
+const PAY = {
+  /* number = numéro qui reçoit l'argent (10 chiffres, sans espace)
+     ussd   = code composé automatiquement. {num} = numéro, {amt} = montant en Ar
+     menu   = code du menu à composer si le code automatique ne passe pas */
+  mvola:   { name:'MVola',        emoji:'🟡', c:'#FACC15', type:'mobile', sub:'Mobile Money', number:'0340000000', holder:'NEXYTOP',
+             ussd:'#111*1*2*{num}*{amt}#',            menu:'#111#' },
+  orange:  { name:'Orange Money', emoji:'🟠', c:'#FB923C', type:'mobile', sub:'Mobile Money', number:'0320000000', holder:'NEXYTOP',
+             ussd:'#144*1*1*{num}*{num}*{amt}#',      menu:'#144#' },
+  airtel:  { name:'Airtel Money', emoji:'🔴', c:'#F43F5E', type:'mobile', sub:'Mobile Money', number:'0330000000', holder:'NEXYTOP',
+             ussd:'*436*2*1*1*{num}*{amt}#',          menu:'*436#' },
+  binance: { name:'Crypto · Binance', emoji:'🪙', c:'#F0B90B', type:'crypto', sub:'USDT via Binance', binanceId:'000000000', address:'T_VOTRE_ADRESSE_USDT', network:'TRC20' }
+};
+const ussdCode = (m, total) => m.ussd.split('{num}').join(m.number).split('{amt}').join(String(total));
+const fmtNum = n => n.replace(/^(\d{3})(\d{2})(\d{3})(\d{2})$/, '$1 $2 $3 $4');
+const cartTotal = () => cart.reduce((s, i) => s + i.unit * i.qty, 0);
+const copyBtn = t => `<button class="copy" onclick="copyText('${esc(t)}',this)">Copier</button>`;
+function copyText(t, btn) {
+  const done = () => { const o = btn.textContent; btn.textContent = 'Copié ✓'; setTimeout(() => btn.textContent = o, 1500); };
+  try { navigator.clipboard.writeText(t).then(done, done); } catch { done(); }
+}
+
+function toPayment() {
   const errEl = $('cartError'); errEl.classList.remove('show');
   if (!cart.length) return;
-  const showErr = (msg, el) => { errEl.textContent = msg; errEl.classList.add('show'); if (el) { el.classList.add('bad'); el.focus(); } };
-  /* 1) ID / infos de chaque article */
   for (const inp of document.querySelectorAll('#cartBody .ci-fields input')) {
-    if (!inp.value.trim()) { const lab = inp.previousElementSibling.textContent.replace(' *', ''); return showErr(`Remplissez « ${lab} » pour ${cart.find(i => i.id === inp.dataset.item)?.game || 'cet article'}.`, inp); }
+    if (!inp.value.trim()) {
+      const lab = inp.previousElementSibling.textContent.replace(' *', '');
+      errEl.textContent = `Remplissez « ${lab} » pour ${cart.find(i => i.id === inp.dataset.item)?.game || 'cet article'}.`;
+      errEl.classList.add('show'); inp.classList.add('bad'); inp.focus(); return;
+    }
   }
-  /* 2) référence de transaction (obligatoire) */
-  const ref = $('cartRef').value.trim();
-  if (ref.length < 4) return showErr('Entrez la référence de votre transaction (reçue après le paiement).', $('cartRef'));
-  /* 3) téléphone (optionnel) */
-  const phone = $('cartPhone').value.trim();
-  if (phone && phone.replace(/\D/g, '').length < 8) return showErr('Le numéro de téléphone semble invalide (laissez vide si vous ne souhaitez pas le donner).', $('cartPhone'));
+  closeCart(); renderPayment(); go('paiement');
+}
+
+function renderPayment() {
+  $('payDone').style.display = 'none'; $('payMain').style.display = '';
+  $('payMethods').innerHTML = Object.entries(PAY).map(([k, m]) => `
+    <button class="pm ${k === payMethod ? 'sel' : ''}" style="--pc:${m.c}" onclick="selectPay('${k}')">
+      <span class="pe">${m.emoji}</span><span><strong>${esc(m.name)}</strong><small>${esc(m.sub)}</small></span>
+    </button>`).join('');
+  $('paySummary').innerHTML = cart.length ? cart.map(i => {
+    const info = Object.values(i.fields).filter(Boolean).map(esc).join(' · ');
+    return `<div class="ps-item">${tile(i.slug, 'sm')}<div><strong>${esc(i.game)}</strong><small>${esc(i.pack)}${i.qty > 1 ? ' ×' + i.qty : ''}${info ? '<br>' + info : ''}</small></div><b>${fmt(i.unit * i.qty)}</b></div>`;
+  }).join('') : '<p class="hint">Votre panier est vide.</p>';
+  $('payTotal').textContent = fmt(cartTotal());
+  $('payRef').value = $('payRef').value; $('payPhone').value = $('payPhone').value || safeGet('nx-phone', '');
+  renderPayInstr();
+}
+
+function selectPay(k) { payMethod = k; renderPayment(); setTimeout(() => $('payInstrPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50); }
+
+function renderPayInstr() {
+  const m = PAY[payMethod], total = cartTotal();
+  $('payInstrPanel').style.display = $('payConfirm').style.display = m ? '' : 'none';
+  $('payBtn').disabled = !m || !cart.length;
+  $('payCrypto').style.display = 'none';
+  if (!m) return;
+  let html;
+  if (m.type === 'mobile') {
+    const code = ussdCode(m, total);
+    html = `<div class="instr">
+        <div class="irow"><span>Montant à envoyer</span><b>${fmt(total)}</b></div>
+        <div class="irow"><span>Numéro ${esc(m.name)}</span><b>${esc(fmtNum(m.number))}${copyBtn(m.number)}</b></div>
+        <div class="irow"><span>Nom du compte</span><b>${esc(m.holder)}</b></div></div>
+      <a class="btn acc block dial" href="tel:${encodeURIComponent(code)}">📲 Payer avec ${esc(m.name)} · ${fmt(total)}</a>
+      <div class="ussd-code"><span>Code :</span><code>${esc(code)}</code>${copyBtn(code)}</div>
+      <ol class="istep">
+        <li>Touchez le bouton ci-dessus : le code s'ouvre dans votre téléphone avec le <b>numéro</b> et le <b>montant</b> déjà remplis.</li>
+        <li>Vérifiez que l'écran affiche bien <b>${fmt(total)}</b> et <b>${esc(fmtNum(m.number))}</b>.</li>
+        <li>Entrez votre <b>code secret ${esc(m.name)}</b> pour valider.</li>
+        <li>Notez la <b>référence de la transaction</b> reçue par SMS et collez-la ci-dessous.</li></ol>
+      <p class="hint">💻 Sur ordinateur ? Copiez le code et composez-le sur votre téléphone. Si le code ne s'ouvre pas, composez <b>${esc(m.menu)}</b> puis « Transfert d'argent » et envoyez <b>${fmt(total)}</b> au <b>${esc(fmtNum(m.number))}</b>.</p>`;
+  } else {
+    const usdt = (total / USD_TO_MGA).toFixed(2);
+    html = `<div class="instr">
+        <div class="irow"><span>Montant à envoyer</span><b>≈ ${usdt} USDT</b></div>
+        <div class="irow"><span>Binance Pay ID</span><b>${esc(m.binanceId)}${copyBtn(m.binanceId)}</b></div>
+        <div class="irow"><span>Adresse USDT (${esc(m.network)})</span><b style="font-size:.85rem;">${esc(m.address)}${copyBtn(m.address)}</b></div></div>
+      <ol class="istep">
+        <li>Envoyez <b>${usdt} USDT</b> via <b>Binance Pay</b> (sans frais) ou par transfert sur le réseau <b>${esc(m.network)}</b>.</li>
+        <li>Les frais de réseau sont à votre charge : envoyez le montant net indiqué.</li>
+        <li>Copiez l'<b>ID de l'ordre</b> (Binance Pay) ou le <b>TxID</b> (transfert).</li>
+        <li>Collez-le ci-dessous puis confirmez votre commande.</li></ol>`;
+    $('payCrypto').style.display = ''; $('payCrypto').textContent = `≈ ${usdt} USDT (taux : 1 USD = ${USD_TO_MGA.toLocaleString('fr-FR')} Ar)`;
+  }
+  $('payInstr').innerHTML = html;
+  $('payRef').placeholder = m.type === 'crypto' ? 'ID de l\'ordre Binance ou TxID' : 'ex. MP240101.1234.A12345';
+}
+
+async function confirmOrder() {
+  const errEl = $('payError'); errEl.classList.remove('show');
+  const showErr = (msg, el) => { errEl.textContent = msg; errEl.classList.add('show'); if (el) { el.classList.add('bad'); el.focus(); } };
+  if (!cart.length) return showErr('Votre panier est vide.');
+  const m = PAY[payMethod];
+  if (!m) return showErr('Choisissez un mode de paiement.');
+  const ref = $('payRef').value.trim();
+  if (ref.length < 4) return showErr('Entrez la référence de votre transaction (reçue après le paiement).', $('payRef'));
+  const phone = $('payPhone').value.trim();
+  if (phone && phone.replace(/\D/g, '').length < 8) return showErr('Le numéro de téléphone semble invalide (laissez vide si vous ne souhaitez pas le donner).', $('payPhone'));
   safeSet('nx-phone', phone);
-  const btn = $('validateBtn'); btn.disabled = true; btn.textContent = 'Envoi en cours…';
+  const btn = $('payBtn'); btn.disabled = true; btn.textContent = 'Envoi en cours…';
   const rows = cart.map(i => { const f = i.fields; return {
     jeu: i.game,
     pack: i.qty > 1 ? `${i.pack} ×${i.qty}` : i.pack,
@@ -763,20 +900,28 @@ async function validate() {
     player_id: f.player_id || f.uid || f.roblox_username || f.telegram_username || f.steam_login || f.email || '',
     nom_joueur: f.player_name || f.discord_username || '',
     telephone: phone,
-    reference: ref
+    reference: ref,
+    paiement: m.name
   }; });
   try {
     let { error } = await db.from('commandes').insert(rows);
-    /* Si la colonne "reference" n'existe pas encore, on enregistre quand même la commande avec la référence dans le pack */
-    if (error && /reference/i.test(error.message || '')) {
-      const fallback = rows.map(({ reference, ...r }) => ({ ...r, pack: `${r.pack} [Réf: ${reference}]` }));
+    /* Colonnes "reference"/"paiement" pas encore créées : on enregistre quand même, en les ajoutant au nom du pack */
+    if (error && /reference|paiement/i.test(error.message || '')) {
+      const fallback = rows.map(({ reference, paiement, ...r }) => ({ ...r, pack: `${r.pack} [${paiement} · Réf: ${reference}]` }));
       ({ error } = await db.from('commandes').insert(fallback));
     }
     if (error) throw error;
-    cart = []; saveCart(); orderDone = phone || ' '; $('cartRef').value = ''; renderCart();
+    cart = []; saveCart(); renderCart(); $('payRef').value = '';
+    $('payMain').style.display = 'none';
+    $('payDone').style.display = '';
+    $('payDone').innerHTML = `<div class="panel done-box" style="max-width:560px;margin:0 auto;"><div class="ok">✓</div><h3>Commande envoyée !</h3>
+      <p>Merci ! Nous vérifions votre paiement ${esc(m.name)} et traitons votre recharge très rapidement${phone ? `. Nous pourrons vous joindre au <b>${esc(phone)}</b>` : ''}.</p>
+      <button class="btn block" onclick="go('accueil')">Retour à l'accueil</button>
+      <button class="btn ghost block" style="margin-top:10px;" onclick="go('suivi')">Suivre ma commande</button></div>`;
+    window.scrollTo({ top: 0 });
   } catch (err) {
-    errEl.textContent = 'Erreur : ' + (err.message || 'réessayez'); errEl.classList.add('show');
-  } finally { btn.disabled = false; btn.textContent = 'Valider la commande'; }
+    showErr('Erreur : ' + (err.message || 'réessayez'));
+  } finally { btn.textContent = 'Confirmer la commande'; btn.disabled = !PAY[payMethod] || !cart.length; }
 }
 
 /* ================= Suivi ================= */
